@@ -17,6 +17,8 @@ dist_single/
 # Release Binaries & Installers
 release_*/
 *.exe
+!bin/**/*.exe
+!bin/scrcpy/*.exe
 *.zip
 *.msi
 

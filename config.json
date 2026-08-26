@@ -9,5 +9,5 @@
     "debloater_tab_visible": false,
     "debloater_require_challenge": true,
     "debloater_disclaimer_mode": "always",
-    "recording_directory": "D:\\Android\\PC Support\\DroidDoctor\\recordings"
+    "recording_directory": "recordings"
 }
