@@ -4,6 +4,9 @@ from core.i18n import I18n
 from core.settings_manager import SettingsManager
 
 def play_alert():
+    """
+    Plays a standard Windows notification sound if sound effects are enabled in user settings.
+    """
     if not SettingsManager.get_instance().get("sound_effects", True):
         return
     try:
@@ -12,7 +15,10 @@ def play_alert():
         pass
 
 class StorageConfirmDialog(ctk.CTkToplevel):
-    """Modal Dialog Konfirmasi Pembersihan Penyimpanan dengan Jaminan Keamanan Data Pribadi."""
+    """
+    Modal confirmation dialog for storage cleanup operations.
+    Displays total reclaimable space summary, selected categories, and safety reassurance.
+    """
     def __init__(self, parent, total_size_str: str, categories_list: list, on_confirm_callback):
         super().__init__(parent)
         self.on_confirm = on_confirm_callback
@@ -41,7 +47,6 @@ class StorageConfirmDialog(ctk.CTkToplevel):
             text_color=("#059669", "#10B981")
         ).pack(anchor="w", pady=(0, 6))
 
-        # Size Summary Card
         card = ctk.CTkFrame(container, fg_color=("#ECFDF5", "#064E3B"), corner_radius=10, border_width=1, border_color=("#A7F3D0", "#047857"))
         card.pack(fill="x", pady=(0, 10))
 

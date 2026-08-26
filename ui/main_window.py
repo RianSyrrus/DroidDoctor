@@ -11,7 +11,11 @@ from .tabs.tools_tab import ToolsTab
 from .components.settings_overlay import SettingsOverlay
 
 class MainWindow(ctk.CTk):
-    """Jendela Utama DroidDoctor dengan In-App Modal Settings, Multi-Bahasa, dan Preservasi Tab 100%."""
+    """
+    Primary desktop graphical interface for DroidDoctor.
+    Controls application window geometry, navigation sidebar, multi-tab routing,
+    live telemetry polling loop, and internationalization updates.
+    """
     def __init__(self, adb_manager, hardware_parser):
         super().__init__()
         self.adb = adb_manager
@@ -20,11 +24,10 @@ class MainWindow(ctk.CTk):
 
         self.title("DroidDoctor — Android Health & Diagnostics Suite")
         
-        # Algoritma Adaptif Layar Universal (Auto-Fit Laptop Layar Kecil & PC Monitor Besar)
+        # Adaptive window geometry scaling for varied display resolutions
         screen_w = self.winfo_screenwidth()
         screen_h = self.winfo_screenheight()
 
-        # Target 1422x853 pada layar Full HD (1920x1080+), atau 88-90% proporsional jika layar laptop kecil (1366x768 / 1280x720)
         win_w = max(980, min(1422, int(screen_w * 0.88)))
         win_h = max(600, min(853, int(screen_h * 0.88)))
 
@@ -33,7 +36,7 @@ class MainWindow(ctk.CTk):
         self.geometry(f"{win_w}x{win_h}+{pos_x}+{pos_y}")
         self.minsize(960, 580)
 
-        # Set Window Titlebar and Taskbar Icon
+        # Resolve and apply application window icon
         import os, sys
         base_proj = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         icon_candidates = [
@@ -68,7 +71,6 @@ class MainWindow(ctk.CTk):
         self.current_tab = None
         self._init_tabs()
 
-        # In-App Settings Modal Overlay (Fixed Size 650x480)
         self.settings_overlay = SettingsOverlay(
             self.content_area,
             on_close=self._on_settings_closed,
@@ -201,7 +203,10 @@ class MainWindow(ctk.CTk):
                 act_btn.configure(fg_color=("#DBEAFE", "#1E3A8A"), text_color=("#1D4ED8", "#93C5FD"))
 
     def _reload_language(self):
-        """Penyegaran teks antarmuka secara dinamis dengan preservasi tab aktif & settings overlay."""
+        """
+        Dynamically reloads all user interface strings in-place across the sidebar,
+        active tabs, and settings overlay without restarting the application.
+        """
         last_tab_idx = 1
         if self.current_tab == self.tab_mirror:
             last_tab_idx = 2
@@ -222,7 +227,7 @@ class MainWindow(ctk.CTk):
         self.btn_tab5.configure(text=I18n.t("nav_tools"))
         self.btn_settings.configure(text=I18n.t("nav_settings"))
 
-        # Re-create tab contents for clean translated strings
+        # Rebuild tab instances with updated translation dictionaries
         if self.current_tab:
             self.current_tab.pack_forget()
         for w in self.content_area.winfo_children():
@@ -249,6 +254,13 @@ class MainWindow(ctk.CTk):
             self.settings_overlay.lift()
 
     def _switch_tab(self, tab, active_btn):
+        """
+        Switches the visible tab view and highlights the corresponding sidebar button.
+
+        Args:
+            tab: Target tab frame instance.
+            active_btn: Corresponding sidebar CTkButton.
+        """
         tab_name = tab.__class__.__name__
         if self.current_tab == tab:
             print(f"[NAV] Tab '{tab_name}' is already active.")
@@ -262,7 +274,9 @@ class MainWindow(ctk.CTk):
         print(f"[NAV] Switched to active tab: '{tab_name}'")
 
     def bring_to_front(self):
-        """Menjaga agar jendela DroidDoctor tetap berada di posisi depan (Foreground) saat perangkat dicolok atau di-allow."""
+        """
+        Brings the application window to the active foreground on device connection / authorization.
+        """
         try:
             self.lift()
             self.focus_force()

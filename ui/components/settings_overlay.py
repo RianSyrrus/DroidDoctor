@@ -4,7 +4,10 @@ from core.i18n import I18n
 from ..theme_manager import ThemeManager
 
 class SettingsOverlay(ctk.CTkFrame):
-    """In-App Modal Settings Card Terpusat Sempurna (Zero-Artifact, Fixed Center 650x480)."""
+    """
+    Modal settings card component centered within the primary application viewport.
+    Provides categorized configuration pages for Appearance, Engine, Security, and System About.
+    """
     def __init__(self, master, on_close=None, on_change=None, **kwargs):
         super().__init__(
             master, width=650, height=480, corner_radius=14,
@@ -25,7 +28,7 @@ class SettingsOverlay(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        # Left Nav Bar (Fixed 200px)
+        # Left navigation frame
         self.nav_frame = ctk.CTkFrame(self, width=200, corner_radius=0, fg_color=("#F1F5F9", "#0E1422"), border_width=1, border_color=("#E2E8F0", "#1E293B"))
         self.nav_frame.grid(row=0, column=0, sticky="nsew")
         self.nav_frame.grid_propagate(False)
@@ -43,14 +46,13 @@ class SettingsOverlay(ctk.CTkFrame):
         self.btn_nav3 = self._make_nav_btn(I18n.t("settings_cat_security"), self._show_security)
         self.btn_nav4 = self._make_nav_btn(I18n.t("settings_cat_about"), self._show_about)
 
-        # Right Content Area (Fixed 450px)
+        # Right content area
         self.right_container = ctk.CTkFrame(self, width=450, fg_color="transparent")
         self.right_container.grid(row=0, column=1, sticky="nsew", padx=20, pady=16)
         self.right_container.grid_propagate(False)
         self.right_container.grid_columnconfigure(0, weight=1)
         self.right_container.grid_rowconfigure(1, weight=1)
 
-        # Header with Close [ X ] Button
         self.top_hdr = ctk.CTkFrame(self.right_container, height=36, fg_color="transparent")
         self.top_hdr.grid(row=0, column=0, sticky="ew", pady=(0, 6))
 

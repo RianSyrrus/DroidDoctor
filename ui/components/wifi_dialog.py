@@ -7,6 +7,9 @@ from core.settings_manager import SettingsManager
 _active_wifi_dialog = None
 
 def play_modal_blocked_sound():
+    """
+    Plays an audible chime when attempting invalid operations or modal conflicts.
+    """
     if not SettingsManager.get_instance().get("sound_effects", True):
         return
     wav_candidates = [
@@ -27,7 +30,10 @@ def play_modal_blocked_sound():
         pass
 
 class WifiDialog(ctk.CTkToplevel):
-    """Dialog Nirkabel Modal Single-Instance dengan Lokalisasi i18n."""
+    """
+    Single-instance modal dialog for Wireless ADB TCP/IP connection
+    and Android 11+ 6-digit wireless pairing code exchange.
+    """
     def __init__(self, parent, adb_manager, on_success_callback=None):
         global _active_wifi_dialog
         if _active_wifi_dialog is not None and _active_wifi_dialog.winfo_exists():

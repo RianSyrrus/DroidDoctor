@@ -4,6 +4,9 @@ from core.i18n import I18n
 from core.settings_manager import SettingsManager
 
 def play_alert():
+    """
+    Plays an audible warning alert if sound effects are enabled in user settings.
+    """
     if not SettingsManager.get_instance().get("sound_effects", True):
         return
     try:
@@ -12,7 +15,10 @@ def play_alert():
         pass
 
 class DebloatDisclaimerDialog(ctk.CTkToplevel):
-    """Modal Dialog Peringatan & Penafian Tanggung Jawab Debloater dengan i18n."""
+    """
+    Mandatory safety disclaimer modal dialog presented upon accessing the Debloater suite.
+    Outlines user responsibility, non-root user-space isolation, and recovery guarantees.
+    """
     def __init__(self, parent):
         super().__init__(parent)
 

@@ -4,6 +4,9 @@ from core.i18n import I18n
 from core.settings_manager import SettingsManager
 
 def play_alert():
+    """
+    Plays an audible warning alert if sound effects are enabled in user settings.
+    """
     if not SettingsManager.get_instance().get("sound_effects", True):
         return
     try:
@@ -12,7 +15,10 @@ def play_alert():
         pass
 
 class ConfirmDialog(ctk.CTkToplevel):
-    """Dialog Konfirmasi Keamanan Penonaktifan & Penghapusan dengan i18n."""
+    """
+    Safety confirmation modal dialog for package disabling and uninstallation.
+    Supports Type-to-Confirm challenge verification for critical system packages.
+    """
     def __init__(self, parent, title: str, app_name: str, package_name: str, is_system: bool, action_type: str, on_confirm_callback, require_challenge: bool = False):
         super().__init__(parent)
         self.on_confirm = on_confirm_callback

@@ -2,7 +2,10 @@ import json
 import os
 
 class I18n:
-    """Mesin Lokalisasi Bahasa Multi-Language Terpusat untuk DroidDoctor."""
+    """
+    Centralized Internationalization (i18n) localization engine for DroidDoctor.
+    Supports dynamic runtime translation switching between English (en) and Indonesian (id).
+    """
     _current_language = "en"
     _listeners = []
 
@@ -513,6 +516,12 @@ class I18n:
 
     @classmethod
     def set_language(cls, lang: str):
+        """
+        Sets active application language code and broadcasts update notifications to registered listeners.
+
+        Args:
+            lang (str): Language code ('en' or 'id').
+        """
         if lang in cls.TRANSLATIONS:
             cls._current_language = lang
             try:
@@ -524,6 +533,16 @@ class I18n:
 
     @classmethod
     def t(cls, key: str, **kwargs) -> str:
+        """
+        Translates a localization key to the current active language string with format parameter replacement.
+
+        Args:
+            key (str): Translation key string.
+            **kwargs: Dynamic keyword arguments for string interpolation.
+
+        Returns:
+            str: Localized text string.
+        """
         lang_dict = cls.TRANSLATIONS.get(cls._current_language, cls.TRANSLATIONS["en"])
         val = lang_dict.get(key, cls.TRANSLATIONS["en"].get(key, key))
         if kwargs:
@@ -533,11 +552,20 @@ class I18n:
 
     @classmethod
     def register_listener(cls, callback):
+        """
+        Registers a callback function to be invoked when the active language changes.
+
+        Args:
+            callback: Callable listener function.
+        """
         if callback not in cls._listeners:
             cls._listeners.append(callback)
 
     @classmethod
     def notify_listeners(cls):
+        """
+        Dispatches language change events to all active registered callback listeners.
+        """
         for cb in list(cls._listeners):
             try:
                 cb()

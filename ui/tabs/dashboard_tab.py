@@ -2,7 +2,11 @@ import customtkinter as ctk
 from core.i18n import I18n
 
 class DashboardTab(ctk.CTkFrame):
-    """Tab 1: Dashboard Universal Responsive Diagnostic Grid (Auto 2-Col pada Layar Kompak & 3-Col pada Layar Lebar)."""
+    """
+    Primary diagnostics dashboard view presenting real-time hardware telemetry
+    across Battery, RAM, Storage, SoC & Camera, Display, and System Security modules.
+    Supports responsive 2-column or 3-column layouts based on window viewport dimensions.
+    """
     def __init__(self, master, adb_manager, hardware_parser, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         self.adb = adb_manager
@@ -14,7 +18,7 @@ class DashboardTab(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
-        # 1. Hero Device Header Card
+        # Device Hero Header Card
         self.header_card = ctk.CTkFrame(self, corner_radius=14, fg_color=("#FFFFFF", "#111827"), border_width=1, border_color=("#E2E8F0", "#1E293B"))
         self.header_card.grid(row=0, column=0, sticky="ew", padx=4, pady=(2, 6))
         self.header_card.grid_columnconfigure(1, weight=1)
@@ -54,7 +58,7 @@ class DashboardTab(ctk.CTkFrame):
         )
         self.lbl_status_badge.grid(row=1, column=2, padx=(0, 16), pady=(0, 8), sticky="e")
 
-        # 2. Metric Grid Container (Responsive 2-Col / 3-Col)
+        # Telemetry metric cards container
         self.cards_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.cards_frame.grid(row=1, column=0, sticky="nsew", padx=0, pady=0)
 
@@ -195,6 +199,12 @@ class DashboardTab(ctk.CTkFrame):
         return card
 
     def update_metrics(self, data: dict):
+        """
+        Populates all dashboard cards and device header widgets with fresh telemetry data.
+
+        Args:
+            data (dict): Telemetry dictionary returned by HardwareParser.
+        """
         if not data:
             self.set_disconnected()
             return

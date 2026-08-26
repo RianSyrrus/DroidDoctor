@@ -5,8 +5,9 @@ from .adb_manager import ADBManager
 
 class HardwareParser:
     """
-    Parser diagnostik hardware universal tingkat industri dengan arsitektur Ultra-Fast Batched Multiplexing.
-    Mengeksekusi seluruh probing hardware dalam 1 kali round-trip ADB (<500ms) untuk responsivitas instan saat USB dicolok.
+    High-performance Android hardware telemetry and diagnostic engine.
+    Utilizes batched shell multiplexing to retrieve complete device telemetry
+    in a single ADB roundtrip (<500ms) with multi-tier caching.
     """
     def __init__(self, adb_manager: ADBManager):
         self.adb = adb_manager
@@ -20,7 +21,13 @@ class HardwareParser:
         self._last_memory_time: float = 0.0
 
     def get_all_metrics(self) -> Optional[Dict[str, Any]]:
-        """Mengambil seluruh metrik hardware dengan latensi ultra-rendah dan proteksi multi-device."""
+        """
+        Retrieves all hardware telemetry metrics with multi-tier caching and low latency.
+
+        Returns:
+            Optional[Dict[str, Any]]: Dictionary containing 'device', 'battery', 'thermal',
+            'memory', and 'storage' telemetry structures, or None if no device is connected.
+        """
         if not self.adb.current_serial:
             return None
 
@@ -28,7 +35,7 @@ class HardwareParser:
             now = time.time()
             is_new_device = (self._cached_serial != self.adb.current_serial or not self._cached_device_info)
 
-            # Jika perangkat baru tercolok, lakukan Ultra-Fast Batched Probe (1 roundtrip <500ms)
+            # Probe device with fast batch multiplexing on new connection
             if is_new_device:
                 batch_data = self._execute_fast_batch_probe()
                 if not batch_data:
@@ -53,7 +60,7 @@ class HardwareParser:
             else:
                 dev_info = self._cached_device_info
                 
-                # Fast Polling Loop: Hanya query battery & thermal ringan (~40ms)
+                # Fast polling tier: lightweight battery & thermal queries (~40ms)
                 bat_raw = self.adb.shell("dumpsys battery 2>/dev/null")
                 therm_raw = self.adb.shell("cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/thermal_zone1/temp 2>/dev/null")
                 
@@ -85,7 +92,12 @@ class HardwareParser:
             return None
 
     def _execute_fast_batch_probe(self) -> Dict[str, str]:
-        """Mengeksekusi batch script dalam 1 kali round-trip ADB untuk latensi <500ms."""
+        """
+        Executes a multiplexed multi-command batch probe within a single ADB shell roundtrip (<500ms).
+
+        Returns:
+            Dict[str, str]: Parsed section mapping with extracted raw system command outputs.
+        """
         batch_script = """getprop
 echo ===DD_SEC:CPUINFO===
 cat /proc/cpuinfo 2>/dev/null
@@ -128,7 +140,15 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         return sections
 
     def _parse_device_info(self, batch: Dict[str, str]) -> Dict[str, Any]:
-        """Mengekstrak seluruh profil hardware dari hasil batch probe."""
+        """
+        Parses device properties, vendor OS skin, screen resolution, and hardware layout profiles.
+
+        Args:
+            batch (Dict[str, str]): Raw multiplexed batch section outputs.
+
+        Returns:
+            Dict[str, Any]: Comprehensive device specification dictionary.
+        """
         props = {}
         raw_props = batch.get("PROPS", "")
         for line in raw_props.splitlines():
@@ -336,7 +356,19 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         }
 
     def _resolve_chipset(self, platform: str, codename: str, model: str, brand: str, cpuinfo_hw: str = "") -> str:
-        """Mengidentifikasi nama komersial prosesor/chipset SoC dari platform dan codename."""
+        """
+        Resolves the commercial processor (SoC) marketing name based on kernel platform, codename, and hardware identifiers.
+
+        Args:
+            platform (str): Platform board name (e.g., 'sm6115', 'bengal', 'mt6785').
+            codename (str): Device product codename (e.g., 'rosemary', 'spinel', 'op4f11l1').
+            model (str): Commercial device model string.
+            brand (str): Manufacturer brand name.
+            cpuinfo_hw (str): Hardware string from /proc/cpuinfo.
+
+        Returns:
+            str: Standardized commercial chipset name.
+        """
         plat = platform.lower()
         code = codename.lower()
         mod = model.lower()
@@ -397,7 +429,7 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         if plat.startswith("mt") or "mediatek" in plat or "mediatek" in hw:
             return f"MediaTek ({platform.upper()})"
 
-        # 3. Samsung Exynos & Google Tensor & UNISOC
+        # 3. Samsung Exynos, Google Tensor & UNISOC Series
         if "exynos" in plat or "s5e" in plat or "exynos" in hw:
             return f"Samsung Exynos ({platform.upper()})"
         if "tensor" in plat or "gs" in plat:
@@ -411,7 +443,17 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         return platform.upper() if platform else "Octa-Core Processor"
 
     def _parse_battery_metrics(self, out: str, codename: str = "", model: str = "") -> Dict[str, Any]:
-        """Fast Tier: Baterai, Kapasitas Desain Riil, Kapasitas Aktual, SoH & Wattage."""
+        """
+        Parses battery hardware telemetry, State of Health (SoH), charging wattage, and protocol.
+
+        Args:
+            out (str): Raw output from 'dumpsys battery'.
+            codename (str): Device hardware codename.
+            model (str): Commercial model string.
+
+        Returns:
+            Dict[str, Any]: Structured battery telemetry data.
+        """
         level = 0
         status_code = 1
         health_code = 2
@@ -443,7 +485,7 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
             elif line.startswith("Wireless powered:"):
                 wireless_powered = "true" in line.lower()
 
-        # Dynamic Capacity Resolution
+        # Resolve model capacity & State of Health
         if "rosemary" in codename:
             design_mah = 5000
             actual_mah = 4428
@@ -466,7 +508,6 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         
         is_charging = status_code == 2 or ac_powered or usb_powered or wireless_powered
         status_str = "Charging ⚡" if is_charging else "Discharging"
-        
         power_source = "AC Fast Charger ⚡" if ac_powered else ("USB Port 🔌" if usb_powered else "Battery")
 
         temp_c = round(temp_raw / 10.0, 1) if temp_raw > 100 else float(temp_raw)
@@ -491,7 +532,15 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         }
 
     def _parse_thermal_metrics(self, temp_out: str) -> Dict[str, Any]:
-        """Fast Tier: Suhu Chipset SoC (CPU)."""
+        """
+        Parses SoC CPU thermal zones and determines operating thermal state.
+
+        Args:
+            temp_out (str): Raw thermal zone temperature reading.
+
+        Returns:
+            Dict[str, Any]: Structured thermal metrics.
+        """
         temps = []
         for line in temp_out.splitlines():
             line = line.strip()
@@ -513,7 +562,15 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         }
 
     def _parse_memory_metrics(self, mem_out: str) -> Dict[str, Any]:
-        """Medium Tier: RAM Riil & Top Running Processes."""
+        """
+        Parses kernel memory metrics, physical RAM, ZRAM swap space, and memory generation.
+
+        Args:
+            mem_out (str): Raw output from /proc/meminfo.
+
+        Returns:
+            Dict[str, Any]: Structured memory telemetry.
+        """
         total_kb = 0
         avail_kb = 0
         zram_kb = 0
@@ -531,7 +588,7 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         used_gb = round(total_gb - free_gb, 2)
         pct = round((used_gb / total_gb) * 100, 1) if total_gb else 57.5
 
-        # Physical RAM & Accurate Memory Generation
+        # Classify physical RAM capacity and generation
         if total_gb >= 11.0:
             ram_type = "LPDDR5X (Quad-Channel)"
             comm_ram = 12
@@ -539,7 +596,6 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
             ram_type = "LPDDR4X (Dual-Channel)"
             comm_ram = 8
         elif total_gb >= 5.0:
-            # 6GB RAM phones
             ram_type = "LPDDR4X (Dual-Channel)" if (total_gb > 5.5 and "bengal" in str(self._cached_device_info)) else "LPDDR4 (Dual-Channel)"
             comm_ram = 6
         elif total_gb >= 3.2:
@@ -566,7 +622,19 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         }
 
     def _parse_storage_metrics(self, df_out: str, blocks_out: str, codename: str = "", model: str = "", chipset: str = "") -> Dict[str, Any]:
-        """Medium Tier: Storage Internal & Dynamic System Reserved Calculation."""
+        """
+        Parses internal storage partition metrics, UFS/eMMC generation, and system reserved space.
+
+        Args:
+            df_out (str): Raw output from 'df -h /data'.
+            blocks_out (str): Block device listing from '/sys/block/'.
+            codename (str): Device hardware codename.
+            model (str): Commercial model string.
+            chipset (str): Resolved chipset name.
+
+        Returns:
+            Dict[str, Any]: Structured storage telemetry.
+        """
         total = "108G"
         used = "92G"
         free = "16G"
@@ -581,7 +649,7 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
                 free = parts[3]
                 pct = parts[4]
 
-        # Check UFS vs eMMC with exact generation without slash notation
+        # Resolve exact flash memory generation (UFS 4.0/3.1/2.2/2.1 vs eMMC 5.1)
         blocks = blocks_out.split()
         code = codename.lower()
         mod = model.lower()

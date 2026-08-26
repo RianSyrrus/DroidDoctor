@@ -3,11 +3,11 @@ import sys
 import ctypes
 import multiprocessing
 
-# 1. Wajib untuk PyInstaller di Windows agar subprocess/worker tidak memicu loop eksekusi
+# Freeze support requirement for PyInstaller Windows subprocess spawning
 if __name__ == "__main__":
     multiprocessing.freeze_support()
 
-# 2. Amankan stdout & stderr saat berjalan di mode --noconsole Windows dan catat ke log file
+# Redirect stdout/stderr to temporary log file for headless/windowed execution
 log_path = os.path.join(os.environ.get("TEMP", "C:\\Temp"), "droiddoctor.log")
 try:
     log_f = open(log_path, "a", encoding="utf-8", buffering=1)
@@ -22,9 +22,8 @@ except Exception:
 
 import customtkinter as ctk
 
-# Aktifkan Windows ClearType & High-DPI Awareness V2 agar font 100% tajam & bebas pixel
+# Enable Windows Per-Monitor High-DPI Awareness V2 for sharp font rendering
 try:
-    # Set PROCESS_PER_MONITOR_DPI_AWARE_V2 (Windows 10 1703+)
     ctypes.windll.shcore.SetProcessDpiAwareness(2)
 except Exception:
     try:
@@ -32,7 +31,7 @@ except Exception:
     except Exception:
         pass
 
-# Pastikan Font Smoothing ClearType aktif pada level Windows GDI
+# Ensure Windows GDI ClearType Font Smoothing is active
 try:
     SPI_SETFONTSMOOTHING = 0x004B
     SPIF_UPDATEINIFILE = 0x01
@@ -41,7 +40,7 @@ try:
 except Exception:
     pass
 
-# Set AppUserModelID agar taskbar Windows mengikat ikon kustom DroidDoctor
+# Set Windows Application User Model ID for taskbar icon grouping
 try:
     myappid = "riansyrrus.droiddoctor.suite.1.0.0"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
@@ -53,6 +52,11 @@ from core.hardware_parser import HardwareParser
 from ui.main_window import MainWindow
 
 def main():
+    """
+    Main application bootstrap entry point.
+    Initializes system configurations, internationalization, ADB connectivity,
+    and starts the primary desktop graphical interface.
+    """
     print("=" * 60)
     print("  DroidDoctor v1.0.0 Pro — Android Health & Diagnostics Suite")
     print("=" * 60)

@@ -60,6 +60,15 @@ FRIENDLY_NAMES = {
 GENERIC_WORDS = {'android', 'app', 'mobile', 'client', 'phone', 'global', 'main', 'release', 'intl', 'official', 'service', 'tools', 'tool', 'overlay', 'res'}
 
 def get_friendly_name(pkg: str) -> str:
+    """
+    Transforms reverse-domain Android package identifiers into human-readable application titles.
+
+    Args:
+        pkg (str): Package identifier string (e.g., 'com.instagram.android').
+
+    Returns:
+        str: Human-readable application title.
+    """
     if pkg in FRIENDLY_NAMES:
         return FRIENDLY_NAMES[pkg]
     parts = pkg.split(".")
@@ -70,14 +79,18 @@ def get_friendly_name(pkg: str) -> str:
         meaningful = parts
 
     best = meaningful[-1] if len(meaningful) == 1 else (" ".join(meaningful[-2:]) if len(meaningful) >= 2 else meaningful[0])
-    s = re.sub(r'([a-z])([A-Z])', r' ', best)
-    s = re.sub(r'([a-zA-Z])([0-9])', r' ', s)
+    s = re.sub(r'([a-z])([A-Z])', r'   ', best)
+    s = re.sub(r'([a-zA-Z])([0-9])', r'   ', s)
     words = [w.capitalize() for w in re.findall(r'[A-Za-z0-9]+', s) if w.lower() not in GENERIC_WORDS]
     result = " ".join(words)
     return result if result else pkg
 
 class DebloaterTab(ctk.CTkFrame):
-    """Tab 3: Debloater & App Manager dengan i18n & Reset Scroll."""
+    """
+    Safe package management and non-destructive debloater interface.
+    Allows user-space package disabling, uninstallation (`pm uninstall -k --user 0`),
+    and instant package restoration with safety whitelisting.
+    """
     def __init__(self, master, adb_manager, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         self.adb = adb_manager
@@ -85,7 +98,7 @@ class DebloaterTab(ctk.CTkFrame):
         self._search_job = None
         self.display_limit = 45
 
-        # 1. Header Toolbar
+        # Header Toolbar
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.pack(fill="x", padx=6, pady=(4, 6))
 

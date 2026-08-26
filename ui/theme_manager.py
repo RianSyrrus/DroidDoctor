@@ -1,7 +1,10 @@
 import customtkinter as ctk
 
 class ThemeManager:
-    """Manajer tema modern dengan palet warna harmonis (Tailwind Slate / Apple Modern)."""
+    """
+    Centralized visual theme manager handling dark and light appearance palettes
+    inspired by modern UI frameworks (Tailwind Slate and Modern OS design).
+    """
     
     THEMES = {
         "light": {
@@ -52,6 +55,12 @@ class ThemeManager:
 
     @classmethod
     def set_theme(cls, mode: str):
+        """
+        Updates the global CustomTkinter appearance mode.
+
+        Args:
+            mode (str): Theme mode ('light' or 'dark').
+        """
         if mode in ["light", "dark"]:
             cls.current_mode = mode
             ctk.set_appearance_mode(mode)
@@ -59,4 +68,10 @@ class ThemeManager:
 
     @classmethod
     def get_colors(cls):
+        """
+        Retrieves the color palette dictionary for the currently active theme mode.
+
+        Returns:
+            Dict[str, str]: Color token mapping.
+        """
         return cls.THEMES.get(cls.current_mode, cls.THEMES["light"])

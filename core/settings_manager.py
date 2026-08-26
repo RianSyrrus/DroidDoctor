@@ -3,13 +3,17 @@ import sys
 import json
 
 def get_settings_file() -> str:
-    # 1. Jika mode PyInstaller Portable
+    """
+    Resolves the persistent writable path for the user configuration file.
+
+    Returns:
+        str: Path to %LOCALAPPDATA%/DroidDoctor/config.json in frozen mode or local config.json in dev mode.
+    """
     if getattr(sys, 'frozen', False):
         appdata_dir = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "DroidDoctor")
         os.makedirs(appdata_dir, exist_ok=True)
         return os.path.join(appdata_dir, "config.json")
     
-    # 2. Mode development lokal
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json")
 
 DEFAULT_SETTINGS = {
@@ -26,11 +30,20 @@ DEFAULT_SETTINGS = {
 }
 
 class SettingsManager:
-    """Manajer konfigurasi persisten aplikasi DroidDoctor."""
+    """
+    Singleton configuration manager handling persistent user preferences,
+    UI theme settings, polling rates, and safety switches.
+    """
     _instance = None
 
     @classmethod
     def get_instance(cls):
+        """
+        Retrieves the global singleton instance of SettingsManager.
+
+        Returns:
+            SettingsManager: Singleton configuration manager instance.
+        """
         if cls._instance is None:
             cls._instance = SettingsManager()
         return cls._instance
@@ -41,7 +54,9 @@ class SettingsManager:
         self.load()
 
     def load(self):
-        # Jika belum ada di AppData tapi ada file default bawaan di bundle
+        """
+        Loads configuration settings from disk, applying defaults for any missing keys.
+        """
         if not os.path.exists(self.settings_file):
             bundle_config = os.path.join(getattr(sys, '_MEIPASS', os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "config.json")
             if os.path.exists(bundle_config):
@@ -64,6 +79,9 @@ class SettingsManager:
             self.save()
 
     def save(self):
+        """
+        Serializes current settings to disk in JSON format.
+        """
         try:
             with open(self.settings_file, "w", encoding="utf-8") as f:
                 json.dump(self._settings, f, indent=4)
@@ -71,8 +89,25 @@ class SettingsManager:
             pass
 
     def get(self, key, default=None):
+        """
+        Retrieves a setting value by key.
+
+        Args:
+            key (str): Configuration setting key.
+            default: Optional fallback value if key does not exist.
+
+        Returns:
+            Any: Configuration value.
+        """
         return self._settings.get(key, default if default is not None else DEFAULT_SETTINGS.get(key))
 
     def set(self, key, value):
+        """
+        Updates a setting value and immediately persists changes to disk.
+
+        Args:
+            key (str): Configuration setting key.
+            value: Value to store.
+        """
         self._settings[key] = value
         self.save()

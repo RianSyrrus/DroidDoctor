@@ -82,7 +82,10 @@ class ToolConfirmDialog(ctk.CTkToplevel):
             self.on_confirm()
 
 class ToolsTab(ctk.CTkFrame):
-    """Tab 5: Technician Diagnostic Tools dengan Layout Horizontal Tile List (Bebas Potongan Teks & Luas)."""
+    """
+    Technician diagnostics suite featuring device reboot routines, battery calibration resets,
+    external APK sideloading, hardware text report exports, and QC Inspection Certificates.
+    """
     def __init__(self, master, adb_manager, hardware_parser, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         self.adb = adb_manager
@@ -94,7 +97,7 @@ class ToolsTab(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
-        # 1. Header Toolbar
+        # Header Toolbar
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.grid(row=0, column=0, sticky="ew", padx=6, pady=(4, 6))
 
@@ -110,12 +113,12 @@ class ToolsTab(ctk.CTkFrame):
             text_color=("#475569", "#CBD5E1")
         ).pack(anchor="w", pady=(1, 0))
 
-        # 2. Main Scrollable/Spacious Container
+        # Main Scrollable / Spacious Container
         content = ctk.CTkFrame(self, fg_color="transparent")
         content.grid(row=1, column=0, sticky="nsew", padx=2, pady=2)
         content.grid_columnconfigure((0, 1), weight=1)
 
-        # === SECTION 1: POWER & REBOOT ===
+        # Section 1: Power & Reboot
         sec1 = ctk.CTkFrame(content, corner_radius=14, fg_color=("#FFFFFF", "#111827"), border_width=1, border_color=("#E2E8F0", "#1E293B"))
         sec1.grid(row=0, column=0, sticky="nsew", padx=(4, 6), pady=4)
 

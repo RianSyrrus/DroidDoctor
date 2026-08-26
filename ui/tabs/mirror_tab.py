@@ -5,8 +5,13 @@ from datetime import datetime
 from core.i18n import I18n
 from core.settings_manager import SettingsManager
 
-def get_default_recordings_dir():
-    """Mendapatkan folder penyimpanan rekaman & screenshot yang valid di Windows."""
+def get_default_recordings_dir() -> str:
+    """
+    Resolves a valid persistent destination folder for saved screenshots and screen recordings.
+
+    Returns:
+        str: Absolute directory path.
+    """
     settings = SettingsManager.get_instance()
     saved = settings.get("recording_directory")
     if saved and os.path.exists(saved):
@@ -31,7 +36,10 @@ def get_default_recordings_dir():
     return fallback
 
 class MirrorTab(ctk.CTkFrame):
-    """Tab 2: Screen Mirror & Control Suite dengan Kolom Navigasi Tunggal yang Bersih & Elegan."""
+    """
+    Low-latency Android screen mirroring, HID physical keyboard injection,
+    hardware screenshot capture, and MP4 screen recording studio powered by Scrcpy.
+    """
     def __init__(self, master, adb_manager, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         self.adb = adb_manager
@@ -46,7 +54,7 @@ class MirrorTab(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1), weight=1)
         self.grid_rowconfigure(1, weight=1)
 
-        # 1. Header Toolbar
+        # Header Toolbar
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.grid(row=0, column=0, columnspan=2, sticky="ew", padx=6, pady=(4, 6))
 
@@ -56,7 +64,7 @@ class MirrorTab(ctk.CTkFrame):
             text_color=("#0F172A", "#F8FAFC")
         ).pack(side="left")
 
-        # 2. Left Column Container
+        # Left Column Container
         left_col = ctk.CTkFrame(self, fg_color="transparent")
         left_col.grid(row=1, column=0, sticky="nsew", padx=6, pady=2)
         left_col.grid_columnconfigure(0, weight=1)

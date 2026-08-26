@@ -3,7 +3,11 @@ import threading, time
 from core.i18n import I18n
 
 class StorageTab(ctk.CTkFrame):
-    """Tab 4: Storage Deep Cleaner dengan Teks Berkontras Tinggi & Keterbacaan Optimal (High Legibility)."""
+    """
+    Intelligent internal storage cleaner view with personal data safety guarantees.
+    Scans and cleans application cache, gallery thumbnails, and debug crash logs
+    while strictly protecting user media, camera photos, downloads, and documents.
+    """
     def __init__(self, master, adb_manager, **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         self.adb = adb_manager
@@ -12,7 +16,7 @@ class StorageTab(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1), weight=1)
         self.grid_rowconfigure(1, weight=1)
 
-        # 1. Header Toolbar
+        # Header Toolbar
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.grid(row=0, column=0, columnspan=2, sticky="ew", padx=4, pady=(2, 10))
 
@@ -39,7 +43,7 @@ class StorageTab(ctk.CTkFrame):
         )
         self.btn_scan.pack(side="right")
 
-        # 2. Main Two-Pane Container
+        # Two-Pane Content Area
         # Left Pane: Categories with Checkboxes & Descriptions
         self.left_card = ctk.CTkFrame(self, corner_radius=14, fg_color=("#FFFFFF", "#111827"), border_width=1, border_color=("#E2E8F0", "#1E293B"))
         self.left_card.grid(row=1, column=0, sticky="nsew", padx=(4, 6), pady=(0, 10))
