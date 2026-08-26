@@ -37,3 +37,11 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# AI & Assistant Rules / Private Configuration
+GEMINI.md
+CLAUDE.md
+AGENTS.md
+.cursorrules
+.gemini/
+.claude/
