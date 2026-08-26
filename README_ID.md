@@ -1,8 +1,25 @@
 # DroidDoctor Desktop Suite (v1.0.0 Pro)
 
-> Suite Diagnostik Perangkat Keras Android, Pencerminan Layar Berlatensi Rendah, Debloater Aman, dan Pemeliharaan Sistem untuk Windows.
+> Suite Diagnostik Perangkat Keras Android, Pencerminan Layar Berlatensi Rendah, Debloater Aman Tanpa Root, dan Pemeliharaan Sistem untuk Windows.
+
+[![Release](https://img.shields.io/badge/Release-v1.0.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 [Read Documentation in English (README.md)](README.md)
+
+---
+
+## ⚠️ Status Proyek & Batasan Pengembangan (Known Limitations)
+
+> **Fase Pengembangan:** `v1.0.0 Initial Release (Pengembangan Aktif / Public Beta)`
+
+DroidDoctor dikembangkan secara aktif untuk mendukung ekosistem perangkat Android yang sangat luas. Mengingat tingginya fragmentasi hardware, kustomisasi kernel vendor, dan kebijakan keamanan OEM:
+
+1. **Variasi Telemetri Hardware:** Algoritma perhitungan *State of Health* (SoH) baterai, daya pengisian cepat (Watt), atau tata letak sensor kamera pada ROM vendor tertentu (seperti Samsung One UI, Vivo Funtouch, Realme UI, atau Transsion XOS) memerlukan pemetaan properti berbasis kontribusi komunitas secara berkelanjutan.
+2. **Karakteristik Kabel & Driver:** Penggunaan kabel USB non-data atau driver ADB OEM yang belum terpasang dapat memengaruhi kecepatan respons komunikasi ADB.
+3. **Kolaborasi Komunitas (Laporan Bug & Feedback):** Jika Anda menemukan spesifikasi chipset yang belum terpetakan atau ketidaksesuaian metrik pada model ponsel tertentu, silakan buka laporan di [GitHub Issues](https://github.com/RianSyrrus/DroidDoctor/issues) beserta tipe HP dan data `getprop` perangkat Anda.
 
 ---
 
@@ -17,7 +34,7 @@ DroidDoctor adalah perangkat lunak manajemen desktop sumber terbuka tingkat prod
 ### 1. Telemetri Perangkat Keras & Dashboard Real-Time
 * Metrik baterai komprehensif: Tingkat Kesehatan (SoH), Kapasitas Pabrik (mAh), Kapasitas Riil yang Dapat Dicapai, Tegangan, Suhu Operasional, dan Daya Pengisian (Watt).
 * Pemantauan penggunaan memori RAM dan Swap ZRAM secara langsung.
-* Inspeksi partisi penyimpanan (teknologi UFS / eMMC dan status enkripsi FBE).
+* Inspeksi partisi penyimpanan (teknologi UFS 4.0 / 3.1 / 2.2 / 2.1 vs eMMC 5.1 dan status enkripsi FBE).
 * Diagnostik panel layar: Kecepatan refresh (Hz), Resolusi Layar, Kerapatan Piksel (DPI), dan Level DRM Widevine (L1/L3).
 * Spesifikasi sensor kamera dan prosesor (SoC, arsitektur CPU, dan konfigurasi multi-kamera).
 
@@ -47,11 +64,37 @@ DroidDoctor adalah perangkat lunak manajemen desktop sumber terbuka tingkat prod
 
 ---
 
+## Panduan Memulai
+
+### Opsi A: Versi Portabel Siap Pakai (Disarankan untuk Pengguna)
+1. Unduh berkas `DroidDoctor-v1.0.0-Portable.exe` terbaru dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Klik dua kali untuk langsung menjalankan. Tidak memerlukan instalasi Python atau ADB terpisah.
+
+### Opsi B: Menjalankan dari Kode Sumber (Untuk Pengembang)
+
+```bash
+# 1. Kloning repositori
+git clone https://github.com/RianSyrrus/DroidDoctor.git
+cd DroidDoctor
+
+# 2. Buat dan aktifkan lingkungan virtual (opsional namun disarankan)
+python -m venv venv
+venv\Scripts\activate
+
+# 3. Pasang seluruh dependensi pustaka
+pip install -r requirements.txt
+
+# 4. Jalankan aplikasi
+python main.py
+```
+
+---
+
 ## Persyaratan Sistem
 
-* Sistem Operasi: Windows 10 (1703+) atau Windows 11 (64-bit x64 atau ARM64 Prism).
-* Perangkat Android: Android 5.0 (Lollipop) hingga Android 14+ dengan USB Debugging aktif.
-* Konektivitas: Kabel data USB standar atau Wireless ADB melalui jaringan Wi-Fi lokal.
+* **Sistem Operasi:** Windows 10 (1703+) atau Windows 11 (64-bit x64 atau ARM64 Prism).
+* **Perangkat Android:** Android 5.0 (Lollipop) hingga Android 16+ (HyperOS 3.0 / Android 16) dengan USB Debugging aktif.
+* **Konektivitas:** Kabel data USB standar atau Wireless ADB melalui jaringan Wi-Fi lokal.
 
 ---
 
@@ -81,3 +124,4 @@ DroidDoctor mengintegrasikan dan menyampaikan apresiasi kepada proyek sumber ter
 
 * **Pengembang:** RianSyrrus
 * **Lisensi:** Sumber Terbuka di bawah [MIT License](LICENSE).
+

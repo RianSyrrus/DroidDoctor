@@ -1,8 +1,25 @@
 # DroidDoctor Desktop Suite (v1.0.0 Pro)
 
-> High-Performance Android Hardware Diagnostic, Low-Latency Screen Mirroring, Safe Debloater, and System Maintenance Suite for Windows.
+> High-Performance Android Hardware Diagnostics, Low-Latency Screen Mirroring, Safe Non-Root Debloater, and System Maintenance Suite for Windows.
+
+[![Release](https://img.shields.io/badge/Release-v1.0.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 [Baca Dokumentasi dalam Bahasa Indonesia (README_ID.md)](README_ID.md)
+
+---
+
+## ⚠️ Project Status & Known Limitations
+
+> **Development Phase:** `v1.0.0 Initial Release (Active Development / Public Beta)`
+
+DroidDoctor is actively developed to support the entire spectrum of Android devices. Due to massive hardware fragmentation, custom OEM kernels, and proprietary vendor implementations:
+
+1. **Hardware Telemetry Variations:** Some proprietary battery State of Health (SoH) algorithms, fast-charging wattage readouts, or multi-lens camera configurations on specific vendor ROMs (such as Samsung One UI, Vivo Funtouch, Realme UI, or Transsion XOS) may require continuous community property mapping.
+2. **Platform & Driver Quirks:** Non-standard USB data cables, missing OEM ADB drivers, or aggressive battery saving features on certain phones may affect ADB daemon polling latency.
+3. **Community Telemetry Mapping (Call for Feedback):** If you discover missing chipset specifications, unmapped battery capacities, or metric inaccuracies on your specific phone model, please open an issue in [GitHub Issues](https://github.com/RianSyrrus/DroidDoctor/issues) with your device model and `getprop` output.
 
 ---
 
@@ -17,7 +34,7 @@ DroidDoctor is an open-source, production-grade desktop management suite enginee
 ### 1. Real-Time Hardware Telemetry & Dashboard
 * Comprehensive battery metrics: State of Health (SoH), Design Capacity (mAh), Achievable Capacity, Voltage, Operating Temperature, and Charging Wattage.
 * RAM and ZRAM Swap telemetry with live memory utilization percentages.
-* Storage partition inspection (UFS / eMMC technology and File-Based Encryption status).
+* Storage partition inspection (UFS 4.0 / 3.1 / 2.2 / 2.1 vs eMMC 5.1 technology and File-Based Encryption status).
 * Display panel diagnostics: Refresh rate (Hz), Screen Resolution, Density (DPI), and Widevine DRM level (L1/L3).
 * Camera and processor specifications (SoC, architecture, multi-sensor optical layout).
 
@@ -47,11 +64,37 @@ DroidDoctor is an open-source, production-grade desktop management suite enginee
 
 ---
 
+## Getting Started
+
+### Option A: Portable Standalone Executable (Recommended for End Users)
+1. Download the latest `DroidDoctor-v1.0.0-Portable.exe` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Double-click to run. No external Python or ADB installation is required.
+
+### Option B: Run from Source Code (For Developers)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/RianSyrrus/DroidDoctor.git
+cd DroidDoctor
+
+# 2. Create and activate a virtual environment (optional but recommended)
+python -m venv venv
+venv\Scripts\activate
+
+# 3. Install required dependencies
+pip install -r requirements.txt
+
+# 4. Launch the application
+python main.py
+```
+
+---
+
 ## System Requirements
 
-* Operating System: Windows 10 (1703+) or Windows 11 (64-bit x64 or ARM64 Prism).
-* Android Target: Android 5.0 (Lollipop) up to Android 14+ with USB Debugging enabled.
-* Connectivity: Standard USB data cable or Wireless ADB over local Wi-Fi network.
+* **Operating System:** Windows 10 (1703+) or Windows 11 (64-bit x64 or ARM64 Prism).
+* **Android Target:** Android 5.0 (Lollipop) up to Android 16+ (HyperOS 3.0 / Android 16) with USB Debugging enabled.
+* **Connectivity:** Standard USB data cable or Wireless ADB over local Wi-Fi network.
 
 ---
 
@@ -81,3 +124,4 @@ DroidDoctor integrates and acknowledges the following open-source projects:
 
 * **Developer:** RianSyrrus
 * **License:** Open Source under the [MIT License](LICENSE).
+
