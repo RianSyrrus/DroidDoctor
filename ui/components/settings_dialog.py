@@ -1,0 +1,299 @@
+import customtkinter as ctk
+from core.settings_manager import SettingsManager
+from core.i18n import I18n
+from ..theme_manager import ThemeManager
+
+class SettingsDialog(ctk.CTkToplevel):
+    """Modal Dialog Pengaturan Aplikasi DroidDoctor dengan In-Place Language & Theme Real-Time Refresh."""
+    def __init__(self, parent, on_change_callback=None):
+        super().__init__(parent)
+        self.parent = parent
+        self.settings = SettingsManager.get_instance()
+        self.on_change = on_change_callback
+        self.current_page_fn = self._show_appearance
+
+        self.title(I18n.t("settings_title"))
+        self.geometry("640x470")
+        self.resizable(False, False)
+
+        self.attributes("-topmost", True)
+        self.transient(parent)
+
+        parent.update_idletasks()
+        pw = parent.winfo_width()
+        ph = parent.winfo_height()
+        px = parent.winfo_x()
+        py = parent.winfo_y()
+        self.geometry(f"+{max(0, px + (pw // 2) - 320)}+{max(0, py + (ph // 2) - 235)}")
+        
+        self.deiconify()
+        self.lift()
+        self.focus_force()
+
+        self.bind("<Escape>", lambda e: self.destroy())
+
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        self.nav_frame = ctk.CTkFrame(self, width=190, corner_radius=0, fg_color=("#F1F5F9", "#0E1422"), border_width=1, border_color=("#E2E8F0", "#1E293B"))
+        self.nav_frame.grid(row=0, column=0, sticky="nsew")
+        self.nav_frame.grid_columnconfigure(0, weight=1)
+
+        self.lbl_title_nav = ctk.CTkLabel(
+            self.nav_frame, text=I18n.t("settings_title"),
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            text_color=("#0F172A", "#F8FAFC")
+        )
+        self.lbl_title_nav.pack(anchor="w", padx=16, pady=(18, 14))
+
+        self.btn_nav1 = self._make_nav_btn(I18n.t("settings_cat_appearance"), self._show_appearance)
+        self.btn_nav2 = self._make_nav_btn(I18n.t("settings_cat_engine"), self._show_engine)
+        self.btn_nav3 = self._make_nav_btn(I18n.t("settings_cat_security"), self._show_security)
+        self.btn_nav4 = self._make_nav_btn(I18n.t("settings_cat_about"), self._show_about)
+
+        self.content_container = ctk.CTkFrame(self, fg_color="transparent")
+        self.content_container.grid(row=0, column=1, sticky="nsew", padx=20, pady=16)
+        self.content_container.grid_columnconfigure(0, weight=1)
+        self.content_container.grid_rowconfigure(0, weight=1)
+
+        self.active_frame = None
+        self._show_appearance()
+
+    def _make_nav_btn(self, text: str, command):
+        btn = ctk.CTkButton(
+            self.nav_frame, text=text,
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            anchor="w", fg_color="transparent", text_color=("#475569", "#CBD5E1"),
+            hover_color=("#E2E8F0", "#1E293B"), height=36, corner_radius=8, command=command
+        )
+        btn.pack(fill="x", padx=10, pady=2)
+        return btn
+
+    def _reset_nav_highlights(self):
+        for btn in [self.btn_nav1, self.btn_nav2, self.btn_nav3, self.btn_nav4]:
+            btn.configure(fg_color="transparent", text_color=("#475569", "#CBD5E1"))
+
+    def _switch_page(self, active_btn):
+        if self.active_frame:
+            self.active_frame.destroy()
+        self._reset_nav_highlights()
+        active_btn.configure(fg_color=("#DBEAFE", "#1E3A8A"), text_color=("#1D4ED8", "#93C5FD"))
+        self.active_frame = ctk.CTkFrame(self.content_container, fg_color="transparent")
+        self.active_frame.pack(fill="both", expand=True)
+
+    def _show_appearance(self):
+        self.current_page_fn = self._show_appearance
+        self._switch_page(self.btn_nav1)
+        
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_cat_appearance"), font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color=("#0F172A", "#F8FAFC")).pack(anchor="w", pady=(0, 14))
+
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_lbl_theme"), font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"), text_color=("#334155", "#CBD5E1")).pack(anchor="w", pady=(0, 6))
+        cur_theme = self.settings.get("theme", "light")
+        theme_val = I18n.t("settings_theme_light") if cur_theme == "light" else I18n.t("settings_theme_dark")
+        
+        self.seg_theme = ctk.CTkSegmentedButton(
+            self.active_frame, values=[I18n.t("settings_theme_light"), I18n.t("settings_theme_dark")], height=36,
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._on_theme_changed
+        )
+        self.seg_theme.set(theme_val)
+        self.seg_theme.pack(fill="x", pady=(0, 14))
+
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_lbl_language"), font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"), text_color=("#334155", "#CBD5E1")).pack(anchor="w", pady=(0, 6))
+        cur_lang = self.settings.get("language", "en")
+        lang_val = "English (US)" if cur_lang == "en" else "Bahasa Indonesia"
+        
+        self.seg_lang = ctk.CTkSegmentedButton(
+            self.active_frame, values=["English (US)", "Bahasa Indonesia"], height=36,
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._on_lang_changed
+        )
+        self.seg_lang.set(lang_val)
+        self.seg_lang.pack(fill="x", pady=(0, 14))
+
+        self.sw_sound = ctk.CTkSwitch(
+            self.active_frame, text=I18n.t("settings_sw_sound"),
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            command=self._on_sound_toggle
+        )
+        if self.settings.get("sound_effects", True):
+            self.sw_sound.select()
+        else:
+            self.sw_sound.deselect()
+        self.sw_sound.pack(anchor="w", pady=(6, 0))
+
+    def _show_engine(self):
+        self.current_page_fn = self._show_engine
+        self._switch_page(self.btn_nav2)
+        
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_cat_engine"), font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color=("#0F172A", "#F8FAFC")).pack(anchor="w", pady=(0, 14))
+
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_lbl_rate"), font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"), text_color=("#334155", "#CBD5E1")).pack(anchor="w", pady=(0, 6))
+        rate = self.settings.get("polling_rate", 0.5)
+        rate_map = {0.5: I18n.t("settings_rate_fast"), 1.5: I18n.t("settings_rate_balanced"), 3.0: I18n.t("settings_rate_eco")}
+        
+        self.seg_rate = ctk.CTkSegmentedButton(
+            self.active_frame, values=[I18n.t("settings_rate_fast"), I18n.t("settings_rate_balanced"), I18n.t("settings_rate_eco")], height=36,
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+            command=self._on_rate_changed
+        )
+        self.seg_rate.set(rate_map.get(rate, I18n.t("settings_rate_fast")))
+        self.seg_rate.pack(fill="x", pady=(0, 14))
+
+
+
+    def _show_security(self):
+        self.current_page_fn = self._show_security
+        self._switch_page(self.btn_nav3)
+
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_cat_security"), font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color=("#0F172A", "#F8FAFC")).pack(anchor="w", pady=(0, 14))
+
+        self.sw_debloat_vis = ctk.CTkSwitch(
+            self.active_frame, text=I18n.t("settings_sw_debloat_vis"),
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._on_debloat_vis_toggle
+        )
+        if self.settings.get("debloater_tab_visible", False):
+            self.sw_debloat_vis.select()
+        else:
+            self.sw_debloat_vis.deselect()
+        self.sw_debloat_vis.pack(anchor="w", pady=(0, 8))
+
+        ctk.CTkLabel(
+            self.active_frame,
+            text=I18n.t("settings_desc_debloat_vis"),
+            font=ctk.CTkFont(family="Segoe UI", size=11), text_color=("#64748B", "#94A3B8"), wraplength=380, justify="left"
+        ).pack(anchor="w", pady=(0, 16))
+
+        self.sw_challenge = ctk.CTkSwitch(
+            self.active_frame, text=I18n.t("settings_sw_challenge"),
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            command=lambda: self.settings.set("debloater_require_challenge", self.sw_challenge.get() == 1)
+        )
+        if self.settings.get("debloater_require_challenge", True):
+            self.sw_challenge.select()
+        else:
+            self.sw_challenge.deselect()
+        self.sw_challenge.pack(anchor="w", pady=(0, 8))
+
+    def _show_about(self):
+        self.current_page_fn = self._show_about
+        self._switch_page(self.btn_nav4)
+
+        ctk.CTkLabel(self.active_frame, text=I18n.t("settings_cat_about"), font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color=("#0F172A", "#F8FAFC")).pack(anchor="w", pady=(0, 10))
+
+        # Main Spec Card (Pixel-Perfect 2-Column Grid)
+        card = ctk.CTkFrame(self.active_frame, fg_color=("#F8FAFC", "#111827"), corner_radius=12, border_width=1, border_color=("#E2E8F0", "#1E293B"))
+        card.pack(fill="x", pady=(0, 12))
+
+        # Header with Logo & Version Badge
+        hdr = ctk.CTkFrame(card, fg_color="transparent")
+        hdr.pack(fill="x", padx=16, pady=(14, 10))
+
+        ctk.CTkLabel(hdr, text=I18n.t("settings_about_header"), font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"), text_color=("#2563EB", "#60A5FA")).pack(side="left")
+        ctk.CTkLabel(hdr, text="v1.0.0 PRO", font=ctk.CTkFont(family="Segoe UI", size=10, weight="bold"), fg_color=("#ECFDF5", "#064E3B"), text_color=("#059669", "#10B981"), corner_radius=6, padx=8, pady=2).pack(side="right")
+
+        # 2-Column Grid (Perfect Vertical Straight Alignment)
+        grid_spec = ctk.CTkFrame(card, fg_color="transparent")
+        grid_spec.pack(fill="x", padx=16, pady=(0, 14))
+        grid_spec.grid_columnconfigure(0, weight=0)
+        grid_spec.grid_columnconfigure(1, weight=1)
+
+        specs = [
+            ("Developer", "RianSyrrus"),
+            ("Engine", "Scrcpy 4.0 (SDL 3.4.8 • libavcodec 62)"),
+            ("ADB Core", "Android Debug Bridge 1.0.41 (v35.0.1)"),
+            ("Architecture", "Windows 64-bit (x64) • ARM64 Prism"),
+            ("License", "Open Source (MIT) • Production-Grade")
+        ]
+
+        for idx, (label_key, val_text) in enumerate(specs):
+            # Left Key (Straight alignment, bold)
+            lbl_k = ctk.CTkLabel(
+                grid_spec, text=label_key,
+                font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+                text_color=("#475569", "#94A3B8")
+            )
+            lbl_k.grid(row=idx, column=0, sticky="w", padx=(0, 16), pady=3)
+
+            # Right Value (Right-aligned, clean contrast)
+            lbl_v = ctk.CTkLabel(
+                grid_spec, text=val_text,
+                font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold" if idx == 0 else "normal"),
+                text_color=("#2563EB", "#60A5FA") if idx == 0 else ("#0F172A", "#F8FAFC")
+            )
+            lbl_v.grid(row=idx, column=1, sticky="e", pady=3)
+
+        # Description Box
+        ctk.CTkLabel(
+            self.active_frame,
+            text=I18n.t("settings_about_desc"),
+            font=ctk.CTkFont(family="Segoe UI", size=11), text_color=("#475569", "#CBD5E1"), wraplength=380, justify="left"
+        ).pack(anchor="w", pady=(2, 0))
+
+    def _on_theme_changed(self, choice: str):
+        choice_str = str(choice).lower()
+        mode = "dark" if ("dark" in choice_str or "gelap" in choice_str) else "light"
+        print(f"[SETTINGS_DIALOG] User selected theme: '{choice}' -> Setting: '{mode}'")
+        self.settings.set("theme", mode)
+        self.after(10, lambda m=mode: self._apply_theme_async(m))
+
+    def _apply_theme_async(self, mode: str):
+        print(f"[SETTINGS_DIALOG] Applying theme mode: '{mode}'...")
+        ThemeManager.set_theme(mode)
+        if self.on_change:
+            self.on_change("theme", mode)
+        
+        try:
+            self.deiconify()
+            self.attributes("-topmost", True)
+            self.lift()
+            self.focus_force()
+        except Exception:
+            pass
+        print(f"[SETTINGS_DIALOG] Theme '{mode}' applied and dialog kept open in front.")
+
+    def _on_lang_changed(self, choice: str):
+        new_lang = "en" if "English" in choice else "id"
+        if new_lang != I18n.get_language():
+            print(f"[SETTINGS_DIALOG] Switching language in-place to: '{new_lang}'...")
+            I18n.set_language(new_lang)
+            if self.on_change:
+                self.on_change("language", new_lang)
+            
+            # In-place translation of navigation and current page without closing dialog
+            self.title(I18n.t("settings_title"))
+            self.lbl_title_nav.configure(text=I18n.t("settings_title"))
+            self.btn_nav1.configure(text=I18n.t("settings_cat_appearance"))
+            self.btn_nav2.configure(text=I18n.t("settings_cat_engine"))
+            self.btn_nav3.configure(text=I18n.t("settings_cat_mirror"))
+            self.btn_nav4.configure(text=I18n.t("settings_cat_security"))
+            self.btn_nav5.configure(text=I18n.t("settings_cat_about"))
+            
+            if self.current_page_fn:
+                self.current_page_fn()
+
+            self.after(30, lambda: (self.deiconify(), self.attributes("-topmost", True), self.lift(), self.focus_force()))
+            print("[SETTINGS_DIALOG] In-place language update complete. Dialog kept open.")
+
+    def _on_sound_toggle(self):
+        self.settings.set("sound_effects", self.sw_sound.get() == 1)
+
+    def _on_rate_changed(self, choice: str):
+        if "0.5" in choice:
+            self.settings.set("polling_rate", 0.5)
+        elif "1.5" in choice:
+            self.settings.set("polling_rate", 1.5)
+        else:
+            self.settings.set("polling_rate", 3.0)
+
+    def _on_debloat_vis_toggle(self):
+        is_vis = (self.sw_debloat_vis.get() == 1)
+        self.settings.set("debloater_tab_visible", is_vis)
+        if self.on_change:
+            self.on_change("debloater_tab_visible", is_vis)
+
+    def destroy(self):
+        if hasattr(self.parent, "settings_dialog") and self.parent.settings_dialog is self:
+            self.parent.settings_dialog = None
+        super().destroy()

@@ -1,0 +1,13 @@
+{
+    "theme": "light",
+    "language": "en",
+    "sound_effects": true,
+    "polling_rate": 0.5,
+    "mirror_resolution": "1080p",
+    "mirror_fps": 60,
+    "mirror_auto_turn_off": false,
+    "debloater_tab_visible": false,
+    "debloater_require_challenge": true,
+    "debloater_disclaimer_mode": "always",
+    "recording_directory": "D:\\Android\\PC Support\\DroidDoctor\\recordings"
+}

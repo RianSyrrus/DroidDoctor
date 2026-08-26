@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# C extensions & crash dumps
+*.so
+*.stackdump
+
+# PyInstaller / Build Artifacts
+build/
+dist/
+dist_build/
+dist_single/
+
+# Release Binaries & Installers
+release_*/
+*.exe
+*.zip
+*.msi
+
+# User Recordings & Test Outputs
+recordings/*
+!recordings/.gitkeep
+*.log
+*.tmp
+
+# IDE / Editor configuration
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS Generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
