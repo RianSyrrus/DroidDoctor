@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.0.0 Pro)
+# DroidDoctor Desktop Suite (v1.1.0 Pro)
 
 > High-Performance Android Hardware Diagnostics, Low-Latency Screen Mirroring, Safe Non-Root Debloater, and System Maintenance Suite for Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.0.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.1.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -13,7 +13,7 @@
 
 ## ⚠️ Project Status & Known Limitations
 
-> **Development Phase:** `v1.0.0 Initial Release (Active Development / Public Beta)`
+> **Development Phase:** `v1.1.0 Feature Release (Active Development / Public Beta)`
 
 DroidDoctor is actively developed to support the entire spectrum of Android devices. Due to massive hardware fragmentation, custom OEM kernels, and proprietary vendor implementations:
 

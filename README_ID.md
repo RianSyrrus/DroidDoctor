@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.0.0 Pro)
+# DroidDoctor Desktop Suite (v1.1.0 Pro)
 
 > Suite Diagnostik Perangkat Keras Android, Pencerminan Layar Berlatensi Rendah, Debloater Aman Tanpa Root, dan Pemeliharaan Sistem untuk Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.0.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.1.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -13,7 +13,7 @@
 
 ## ⚠️ Status Proyek & Batasan Pengembangan (Known Limitations)
 
-> **Fase Pengembangan:** `v1.0.0 Initial Release (Pengembangan Aktif / Public Beta)`
+> **Fase Pengembangan:** `v1.1.0 Feature Release (Pengembangan Aktif / Public Beta)`
 
 DroidDoctor dikembangkan secara aktif untuk mendukung ekosistem perangkat Android yang sangat luas. Mengingat tingginya fragmentasi hardware, kustomisasi kernel vendor, dan kebijakan keamanan OEM:
 

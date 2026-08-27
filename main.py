@@ -42,7 +42,7 @@ except Exception:
 
 # Set Windows Application User Model ID for taskbar icon grouping
 try:
-    myappid = "riansyrrus.droiddoctor.suite.1.0.0"
+    myappid = "riansyrrus.droiddoctor.suite.1.1.0"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except Exception:
     pass
