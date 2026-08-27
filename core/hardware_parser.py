@@ -2,6 +2,7 @@ import re
 import time
 from typing import Dict, Any, List, Optional
 from .adb_manager import ADBManager
+from .device_db import DeviceDB
 
 class HardwareParser:
     """
@@ -225,7 +226,22 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         refresh_rate = "60 Hz"
 
         # 5. Model-Specific High-Fidelity Hardware Profiles & Fallbacks
-        if "cph2219" in raw_model.lower() or "op4f11l1" in raw_device:
+        db_spec = DeviceDB.get_instance().lookup(raw_device, raw_model)
+        if db_spec and db_spec.get("marketing_name"):
+            brand = db_spec["brand"] or raw_brand
+            mkt = db_spec["marketing_name"]
+            friendly_model = f"{brand} {mkt}" if brand.lower() not in mkt.lower() else mkt
+            cpu_arch = f"Octa-core ({core_count} Cores • {abi})"
+            cam_rear = f"{db_spec['camera_main_mp']} Main Camera" if db_spec.get("camera_main_mp") else "48 MP AI Multi Rear"
+            cam_front = "16 MP AI Front"
+            biometrics_str = "Fingerprint Sensor"
+            screen_tech = db_spec["screen_type"] if db_spec.get("screen_type") else ("AMOLED Display" if "oled" in raw_device or "amoled" in raw_device else "High-Resolution Display")
+            aspect_ratio = "18:9" if "1080x2160" in resolution else "20:9"
+            touch_sampling = "Standard Touch"
+            audio_output = "Dual Stereo • Hi-Res"
+            if db_spec.get("chipset"):
+                chipset_name = db_spec["chipset"]
+        elif "cph2219" in raw_model.lower() or "op4f11l1" in raw_device:
             brand = "OPPO"
             friendly_model = "OPPO A74 (CPH2219)"
             cpu_arch = "Octa-core (4x 2.0GHz + 4x 1.8GHz Kryo 260)"
@@ -486,7 +502,12 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
                 wireless_powered = "true" in line.lower()
 
         # Resolve model capacity & State of Health
-        if "rosemary" in codename:
+        db_spec = DeviceDB.get_instance().lookup(codename, model)
+        if db_spec and db_spec.get("battery_mah", 0) > 0:
+            design_mah = db_spec["battery_mah"]
+            actual_mah = int(design_mah * 0.92) if ("rosemary" in codename or "x00t" in codename) else design_mah
+            soh_pct = max(50, min(100, int((actual_mah / design_mah) * 100)))
+        elif "rosemary" in codename:
             design_mah = 5000
             actual_mah = 4428
             soh_pct = 89
