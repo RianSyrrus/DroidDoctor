@@ -3,7 +3,7 @@
 ; Architecture: Windows 64-bit (x64)
 
 #define MyAppName "DroidDoctor"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "RianSyrrus"
 #define MyAppExeName "DroidDoctor.exe"
 #define MyAppIcon "assets\app_icon.ico"
@@ -18,7 +18,7 @@ DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-OutputDir=release_v1.0.0
+OutputDir=release_v1.1.1
 OutputBaseFilename=DroidDoctor-Setup-v{#MyAppVersion}
 Compression=lzma2/ultra64
 SolidCompression=yes

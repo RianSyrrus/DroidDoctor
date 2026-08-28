@@ -231,11 +231,17 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
             brand = db_spec["brand"] or raw_brand
             mkt = db_spec["marketing_name"]
             friendly_model = f"{brand} {mkt}" if brand.lower() not in mkt.lower() else mkt
-            cpu_arch = f"Octa-core ({core_count} Cores • {abi})"
-            cam_rear = f"{db_spec['camera_main_mp']} Main Camera" if db_spec.get("camera_main_mp") else "48 MP AI Multi Rear"
+            cpu_arch = f"Octa-core ({abi})"
+            cam_str = str(db_spec.get("camera_main_mp") or "")
+            if "camera" in cam_str.lower():
+                cam_rear = cam_str
+            elif cam_str:
+                cam_rear = f"{cam_str} Main Camera"
+            else:
+                cam_rear = "48 MP AI Multi"
             cam_front = "16 MP AI Front"
             biometrics_str = "Fingerprint Sensor"
-            screen_tech = db_spec["screen_type"] if db_spec.get("screen_type") else ("AMOLED Display" if "oled" in raw_device or "amoled" in raw_device else "High-Resolution Display")
+            screen_tech = db_spec["screen_type"] if db_spec.get("screen_type") else ("AMOLED Display" if "oled" in raw_device or "amoled" in raw_device else "High-Res Display")
             aspect_ratio = "18:9" if "1080x2160" in resolution else "20:9"
             touch_sampling = "Standard Touch"
             audio_output = "Dual Stereo • Hi-Res"
@@ -244,59 +250,59 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         elif "cph2219" in raw_model.lower() or "op4f11l1" in raw_device:
             brand = "OPPO"
             friendly_model = "OPPO A74 (CPH2219)"
-            cpu_arch = "Octa-core (4x 2.0GHz + 4x 1.8GHz Kryo 260)"
-            cam_rear = "48 MP AI Triple Rear"
+            cpu_arch = "Octa-core (2.0 + 1.8 GHz)"
+            cam_rear = "48 MP AI Triple"
             cam_front = "16 MP AI Selfie"
-            biometrics_str = "In-Display Fingerprint + Face"
-            screen_tech = "AMOLED Punch-Hole (409 PPI)"
+            biometrics_str = "In-Display + Face"
+            screen_tech = "AMOLED Punch-Hole"
             aspect_ratio = "20:9"
-            touch_sampling = "180 Hz Touch Rate"
-            audio_output = "Single Speaker • Dirac HD"
+            touch_sampling = "180 Hz Touch"
+            audio_output = "Dirac HD Speaker"
         elif "x00td" in raw_model.lower() or "x00t" in raw_device or raw_brand.lower() == "asus":
             brand = "ASUS"
             friendly_model = "ASUS Zenfone Max Pro M1 (X00TD)"
-            cpu_arch = "Octa-core (4x 1.8GHz + 4x 1.6GHz Kryo 260)"
-            cam_rear = "16 MP + 5 MP Dual Rear"
+            cpu_arch = "Octa-core (1.8 + 1.6 GHz)"
+            cam_rear = "16 MP + 5 MP Dual"
             cam_front = "16 MP AI Selfie"
-            biometrics_str = "Rear Fingerprint + Face"
-            screen_tech = "IPS LCD Full HD+ (404 PPI)"
+            biometrics_str = "Fingerprint + Face"
+            screen_tech = "IPS LCD FHD+"
             aspect_ratio = "18:9"
             touch_sampling = "Standard Touch"
-            audio_output = "Single Speaker • Dirac Power"
+            audio_output = "Dirac Power Speaker"
         elif "rosemary" in raw_device or "m2101k7bny" in raw_model.lower():
             brand = "Redmi"
             friendly_model = "Redmi Note 10S"
-            cpu_arch = "Octa-core (2x 2.05GHz A76 + 6x 2.0GHz A55)"
-            cam_rear = "64 MP Quad Rear"
+            cpu_arch = "Octa-core (2.05 + 2.0 GHz)"
+            cam_rear = "64 MP AI Quad"
             cam_front = "13 MP AI Selfie"
-            biometrics_str = "Side Fingerprint + Face"
-            screen_tech = "AMOLED DotDisplay (1100 nits)"
+            biometrics_str = "Fingerprint + Face"
+            screen_tech = "AMOLED DotDisplay"
             aspect_ratio = "20:9"
-            touch_sampling = "180 Hz Touch Rate"
+            touch_sampling = "180 Hz Touch"
             audio_output = "Dual Stereo • Hi-Res"
         elif "spinel" in raw_device or "2510dra23e" in raw_model.lower():
             brand = "Redmi"
             friendly_model = "Redmi Note 15 4G"
-            cpu_arch = "Octa-core (2x 2.2GHz A76 + 6x 2.0GHz A55)"
-            cam_rear = "108 MP AI Pro Rear"
+            cpu_arch = "Octa-core (2.2 + 2.0 GHz)"
+            cam_rear = "108 MP AI Pro"
             cam_front = "16 MP AI Selfie"
-            biometrics_str = "In-Display Fingerprint + Face"
-            screen_tech = "AMOLED DotDisplay (120 Hz)"
+            biometrics_str = "In-Display + Face"
+            screen_tech = "AMOLED DotDisplay"
             aspect_ratio = "20:9"
-            touch_sampling = "180 Hz Touch Rate"
-            audio_output = "Dual Stereo • Dolby Atmos"
+            touch_sampling = "180 Hz Touch"
+            audio_output = "Dual Stereo • Dolby"
         else:
             brand = raw_brand
             friendly_model = raw_model
             if "kryo" in cpuinfo_hw.lower() or "sdm" in platform or "sm" in platform or "bengal" in platform:
-                cpu_arch = f"Octa-core 64-bit Kryo ({abi})"
+                cpu_arch = f"Octa-core Kryo ({abi})"
             elif "mediatek" in cpuinfo_hw.lower() or "mt" in platform or "green" in platform:
-                cpu_arch = f"Octa-core 64-bit Cortex ({abi})"
+                cpu_arch = f"Octa-core Cortex ({abi})"
             else:
-                cpu_arch = f"Octa-core ({core_count} Cores • {abi})"
+                cpu_arch = f"Octa-core ({core_count} Cores)"
             
-            cam_rear, cam_front = "48 MP AI Multi Rear", "16 MP AI Front"
-            screen_tech = "AMOLED Display" if "oled" in raw_device or "amoled" in raw_device else "High-Resolution Display"
+            cam_rear, cam_front = "48 MP AI Multi", "16 MP AI Front"
+            screen_tech = "AMOLED Display" if "oled" in raw_device or "amoled" in raw_device else "High-Res Display"
             aspect_ratio = "18:9" if "1080x2160" in resolution else "20:9"
             touch_sampling = "Standard Touch"
             audio_output = "Dual Stereo • Hi-Res"
@@ -313,13 +319,13 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
             uptime_str = "5h 18m"
 
         # 7. Hardware DRM & Features
-        drm_level = "L1 (Full HD / 4K)" if ("widevine" in raw_props.lower() or "rosemary" in raw_device or "spinel" in raw_device or "cph" in raw_model.lower()) else "L3 (Standard SD)"
+        drm_level = "Widevine L1 (Full HD)" if ("widevine" in raw_props.lower() or "rosemary" in raw_device or "spinel" in raw_device or "cph" in raw_model.lower()) else "Widevine L3 (SD)"
         bl_status = "Locked" if flash_locked == "1" else "Unlocked"
-        security_state = f"Official (Unrooted) • BL {bl_status}"
+        security_state = f"Official • {bl_status}"
 
         # 8. Network State Resolver (Wi-Fi vs Mobile Data vs Wireless ADB)
         current_serial = self.adb.current_serial or "-"
-        is_wireless_adb = bool(current_serial and (":" in current_serial or "tcp" in current_serial.lower()))
+        is_wireless_adb = bool(current_serial and (":" in current_serial or "tcp" in current_serial.lower() or "tls" in current_serial.lower()))
         
         wlan_out = batch.get("WLAN", "")
         route_out = batch.get("ROUTE", "")
@@ -331,7 +337,12 @@ cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; cat /sys/class/thermal/th
         route_ip = route_m.group(1) if route_m else ""
 
         if is_wireless_adb:
-            net_display = f"Wireless ADB • {current_serial}"
+            if wlan_ip:
+                net_display = f"Wireless ADB • {wlan_ip}"
+            elif ":" in current_serial and not "._adb-tls" in current_serial:
+                net_display = f"Wireless ADB • {current_serial}"
+            else:
+                net_display = "Wireless ADB • Connected"
         elif wlan_ip:
             net_display = f"Wi-Fi • {wlan_ip}"
         elif route_ip and ("10." in route_ip or "100." in route_ip or "172." in route_ip):

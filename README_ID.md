@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.1.0 Pro)
+# DroidDoctor Desktop Suite (v1.1.1 Pro)
 
 > Suite Diagnostik Perangkat Keras Android, Pencerminan Layar Berlatensi Rendah, Debloater Aman Tanpa Root, dan Pemeliharaan Sistem untuk Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.1.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.1.1--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -13,7 +13,7 @@
 
 ## ⚠️ Status Proyek & Batasan Pengembangan (Known Limitations)
 
-> **Fase Pengembangan:** `v1.1.0 Feature Release (Pengembangan Aktif / Public Beta)`
+> **Fase Pengembangan:** `v1.1.1 Patch Release (Pengembangan Aktif / Public Beta)`
 
 DroidDoctor dikembangkan secara aktif untuk mendukung ekosistem perangkat Android yang sangat luas. Mengingat tingginya fragmentasi hardware, kustomisasi kernel vendor, dan kebijakan keamanan OEM:
 
@@ -32,6 +32,7 @@ DroidDoctor adalah perangkat lunak manajemen desktop sumber terbuka tingkat prod
 ## Fitur dan Kemampuan Utama
 
 ### 1. Telemetri Perangkat Keras & Dashboard Real-Time
+* **Basis Data Perangkat Offline:** Database terintegrasi memuat **50.000+ model Android** untuk pengenalan nama resmi komersial, kapasitas baterai desain, dan pencarian sub-milidetik secara offline.
 * Metrik baterai komprehensif: Tingkat Kesehatan (SoH), Kapasitas Pabrik (mAh), Kapasitas Riil yang Dapat Dicapai, Tegangan, Suhu Operasional, dan Daya Pengisian (Watt).
 * Pemantauan penggunaan memori RAM dan Swap ZRAM secara langsung.
 * Inspeksi partisi penyimpanan (teknologi UFS 4.0 / 3.1 / 2.2 / 2.1 vs eMMC 5.1 dan status enkripsi FBE).
@@ -64,11 +65,46 @@ DroidDoctor adalah perangkat lunak manajemen desktop sumber terbuka tingkat prod
 
 ---
 
+## 🔌 Panduan Penyambungan Perangkat (Kabel USB & Wireless ADB)
+
+Sebelum menggunakan DroidDoctor, pastikan perangkat Android Anda telah mengaktifkan fitur **Debugging USB** atau **Debugging Nirkabel (Wireless Debugging)**. Ikuti petunjuk di bawah ini sesuai metode sambungan yang Anda pilih:
+
+### 1. Mengaktifkan Opsi Pengembang & Debugging USB (Pengaturan Awal)
+1. Buka **Pengaturan (Settings)** ponsel -> **Tentang Ponsel (About Phone)**.
+2. Ketuk **Nomor Bentukan (Build Number)** atau versi OS (misal: *Versi MIUI / HyperOS*) sebanyak **7 kali berturut-turut** hingga muncul notifikasi *"Anda sekarang adalah seorang pengembang!"*.
+3. Masuk ke **Pengaturan** -> **Sistem** -> **Opsi Pengembang (Developer Options)** (atau **Setelan Tambahan** -> **Opsi Pengembang** pada ponsel Xiaomi / OPPO / Vivo / Realme).
+4. Aktifkan sakelar **Debugging USB (USB Debugging)**.
+   * *Pengguna Xiaomi / Redmi / POCO:* Aktifkan juga opsi **"Instal melalui USB"** dan **"Debugging USB (Setelan Keamanan)"** *(memerlukan login Akun Mi)*.
+
+### 2. Menyambungkan via Kabel USB (Disarankan)
+1. Hubungkan ponsel ke laptop/PC menggunakan kabel data USB (pastikan bukan kabel charger khusus daya saja).
+2. Pada layar ponsel akan muncul jendela konfirmasi bertuliskan **"Izinkan proses debug USB?"**.
+3. Centang kotak **"Selalu izinkan dari komputer ini"**, lalu tekan **Izinkan (Allow / OK)**.
+4. DroidDoctor akan langsung mendeteksi ponsel dan menampilkan seluruh telemetri hardware secara otomatis dalam 1 detik.
+
+### 3. Menyambungkan Tanpa Kabel / Wi-Fi (Wireless ADB)
+* **Metode A: Android 11, 12, 13, 14, 15+ (Pairing Code):**
+  1. Pastikan PC dan ponsel terhubung ke **jaringan Wi-Fi yang sama**.
+  2. Masuk ke **Opsi Pengembang** -> aktifkan **Debugging Nirkabel (Wireless Debugging)**.
+  3. Ketuk pada opsi **"Pasangkan perangkat dengan kode penyambungan (Pair device with pairing code)"**. Layar akan menampilkan alamat **IP & Port** serta **6-digit Kode Sandi (Pairing Code)**.
+  4. Di DroidDoctor, klik tombol **Sambung Wi-Fi (Wi-Fi Connect)** di pojok kanan atas Dashboard.
+  5. Masukkan IP, Port, dan Kode Sandi, lalu klik **Pasangkan & Sambung**.
+* **Metode B: Android 10 ke Bawah (Mode TCP/IP):**
+  1. Colokkan kabel USB ke ponsel satu kali terlebih dahulu.
+  2. Buka tab **Technician Tools** di DroidDoctor -> klik **Aktifkan Wireless ADB (Port 5555)** (atau ketik perintah `adb tcpip 5555`).
+  3. Cabut kabel USB, klik tombol **Sambung Wi-Fi** di Dashboard, lalu masukkan `IP_Ponsel:5555`.
+
+### 🛠️ Solusi Masalah Penyambungan (Troubleshooting)
+* **Ponsel Tidak Terdeteksi:** Cabut dan colokkan ulang kabel USB, ubah mode USB di bar notifikasi ponsel dari *"Hanya Mengisi Daya"* ke *"Transfer File (MTP)"*, atau gunakan port USB lain di komputer Anda.
+* **Status Tertahan "Offline / Tidak Diotorisasi":** Buka **Opsi Pengembang** di ponsel -> pilih **"Cabut otorisasi proses debug USB (Revoke USB debugging authorizations)"**, lalu colokkan ulang kabel dan tekan **Izinkan**.
+
+---
+
 ## Panduan Memulai
 
 ### Opsi A: Versi Portabel Siap Pakai (Disarankan untuk Pengguna)
-1. Unduh berkas `DroidDoctor-v1.0.0-Portable.exe` terbaru dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
-2. Klik dua kali untuk langsung menjalankan. Tidak memerlukan instalasi Python atau ADB terpisah.
+1. Unduh berkas `DroidDoctor-v1.1.1-Portable.zip` terbaru dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Ekstrak arsip ZIP dan buka `DroidDoctor.exe`. Tidak memerlukan instalasi Python atau ADB terpisah.
 
 ### Opsi B: Menjalankan dari Kode Sumber (Untuk Pengembang)
 

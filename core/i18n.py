@@ -12,7 +12,7 @@ class I18n:
     TRANSLATIONS = {
         "en": {
             "app_title": "DroidDoctor",
-            "app_subtitle": "v1.1.0 Pro • Android Diagnostics Suite",
+            "app_subtitle": "v1.1.1 Pro • Android Diagnostics Suite",
             "nav_dashboard": "Dashboard",
             "nav_mirror": "Screen Mirror",
             "nav_debloater": "Debloater",
@@ -273,7 +273,7 @@ class I18n:
         },
         "id": {
             "app_title": "DroidDoctor",
-            "app_subtitle": "v1.1.0 Pro • Android Diagnostics Suite",
+            "app_subtitle": "v1.1.1 Pro • Android Diagnostics Suite",
             "nav_dashboard": "Dashboard",
             "nav_mirror": "Screen Mirror",
             "nav_debloater": "Debloater",

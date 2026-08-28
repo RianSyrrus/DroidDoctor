@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.1.0 Pro)
+# DroidDoctor Desktop Suite (v1.1.1 Pro)
 
 > High-Performance Android Hardware Diagnostics, Low-Latency Screen Mirroring, Safe Non-Root Debloater, and System Maintenance Suite for Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.1.0--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.1.1--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -13,7 +13,7 @@
 
 ## ⚠️ Project Status & Known Limitations
 
-> **Development Phase:** `v1.1.0 Feature Release (Active Development / Public Beta)`
+> **Development Phase:** `v1.1.1 Patch Release (Active Development / Public Beta)`
 
 DroidDoctor is actively developed to support the entire spectrum of Android devices. Due to massive hardware fragmentation, custom OEM kernels, and proprietary vendor implementations:
 
@@ -32,6 +32,7 @@ DroidDoctor is an open-source, production-grade desktop management suite enginee
 ## Core Capabilities & Features
 
 ### 1. Real-Time Hardware Telemetry & Dashboard
+* **Offline Device Database:** Built-in offline database covering **50,000+ Android models** for instant commercial marketing name lookup, factory design capacity, and sub-millisecond specs recognition.
 * Comprehensive battery metrics: State of Health (SoH), Design Capacity (mAh), Achievable Capacity, Voltage, Operating Temperature, and Charging Wattage.
 * RAM and ZRAM Swap telemetry with live memory utilization percentages.
 * Storage partition inspection (UFS 4.0 / 3.1 / 2.2 / 2.1 vs eMMC 5.1 technology and File-Based Encryption status).
@@ -64,11 +65,46 @@ DroidDoctor is an open-source, production-grade desktop management suite enginee
 
 ---
 
+## 🔌 Device Connection Guide (USB & Wireless ADB)
+
+Before using DroidDoctor, ensure your Android device has **USB Debugging** or **Wireless Debugging** enabled. Follow the instructions below based on your preferred connection method:
+
+### 1. Enabling Developer Options & USB Debugging (First-Time Setup)
+1. Open phone **Settings** > **About Phone** (or **About Device**).
+2. Tap **Build Number** (or **OS Version** / **MIUI/HyperOS Version**) **7 times** consecutively until the popup *"You are now a developer!"* appears.
+3. Navigate to **Settings** > **System** > **Developer Options** (or **Additional Settings** > **Developer Options** on Xiaomi / OPPO / Vivo / Realme).
+4. Enable **USB Debugging** (toggle ON).
+   * *Xiaomi / POCO / Redmi Users:* Also enable **"Install via USB"** and **"USB debugging (Security settings)"** (requires Mi Account login).
+
+### 2. Connecting via USB Cable (Recommended)
+1. Connect your phone to your PC/laptop using a standard USB data cable (ensure it is a data cable, not charging-only).
+2. On your phone screen, a prompt titled **"Allow USB debugging?"** will appear.
+3. Check the box **"Always allow from this computer"**, then tap **Allow** (OK).
+4. DroidDoctor will automatically detect the device and populate the dashboard within 1 second.
+
+### 3. Connecting via Wi-Fi (Wireless ADB)
+* **Method A: Android 11, 12, 13, 14, 15+ (Wireless Debugging Pairing):**
+  1. Ensure both your PC and phone are connected to the **same Wi-Fi network**.
+  2. On your phone, go to **Developer Options** > enable **Wireless Debugging**.
+  3. Tap on **"Pair device with pairing code"**. A dialog will display an **IP address & Port** and a **6-digit Wi-Fi pairing code**.
+  4. In DroidDoctor, click the **Wi-Fi Connect** button at the top-right of the Dashboard.
+  5. Enter the IP, Port, and Pairing Code, then click **Pair & Connect**.
+* **Method B: Android 10 and older (TCP/IP Mode):**
+  1. Connect the phone via USB cable once.
+  2. In DroidDoctor, open **Technician Tools** > click **Enable Wireless ADB (Port 5555)** (or run `adb tcpip 5555`).
+  3. Unplug the USB cable, click **Wi-Fi Connect**, and enter `phone_ip:5555`.
+
+### 🛠️ Common Connection Troubleshooting
+* **Device not detected:** Re-plug the USB cable, switch the USB connection mode on your phone from *"Charging only"* to *"File Transfer (MTP)"*, or try a different USB port.
+* **Authorization stuck on "Offline" / "Unauthorized":** Go to **Developer Options** on your phone > tap **"Revoke USB debugging authorizations"**, then re-plug the cable and tap **Allow**.
+
+---
+
 ## Getting Started
 
 ### Option A: Portable Standalone Executable (Recommended for End Users)
-1. Download the latest `DroidDoctor-v1.0.0-Portable.exe` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
-2. Double-click to run. No external Python or ADB installation is required.
+1. Download the latest `DroidDoctor-v1.1.1-Portable.zip` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Extract the archive and launch `DroidDoctor.exe`. No external Python or ADB installation is required.
 
 ### Option B: Run from Source Code (For Developers)
 
