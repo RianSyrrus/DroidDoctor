@@ -102,11 +102,15 @@ Sebelum menggunakan DroidDoctor, pastikan perangkat Android Anda telah mengaktif
 
 ## Panduan Memulai
 
-### Opsi A: Versi Portabel Siap Pakai (Disarankan untuk Pengguna)
-1. Unduh berkas `DroidDoctor-v1.1.1-Portable.zip` terbaru dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+### Opsi A: Berkas Installer Setup (Disarankan untuk Instalasi Standar)
+1. Unduh `DroidDoctor-Setup-v1.1.1.exe` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Jalankan wizard pemasangan untuk menginstal DroidDoctor ke Start Menu dan Desktop Windows.
+
+### Opsi B: Versi Portabel Siap Pakai (Tanpa Instalasi)
+1. Unduh `DroidDoctor-v1.1.1-Portable.zip` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Ekstrak arsip ZIP dan buka `DroidDoctor.exe`. Tidak memerlukan instalasi Python atau ADB terpisah.
 
-### Opsi B: Menjalankan dari Kode Sumber (Untuk Pengembang)
+### Opsi C: Menjalankan dari Kode Sumber (Untuk Pengembang)
 
 ```bash
 # 1. Kloning repositori

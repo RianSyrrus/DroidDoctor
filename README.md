@@ -102,11 +102,15 @@ Before using DroidDoctor, ensure your Android device has **USB Debugging** or **
 
 ## Getting Started
 
-### Option A: Portable Standalone Executable (Recommended for End Users)
-1. Download the latest `DroidDoctor-v1.1.1-Portable.zip` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+### Option A: Setup Installer (Recommended for Standard Installation)
+1. Download `DroidDoctor-Setup-v1.1.1.exe` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+2. Run the installer wizard to install DroidDoctor to your Start Menu and Desktop.
+
+### Option B: Portable Standalone Executable (Zero Installation)
+1. Download `DroidDoctor-v1.1.1-Portable.zip` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Extract the archive and launch `DroidDoctor.exe`. No external Python or ADB installation is required.
 
-### Option B: Run from Source Code (For Developers)
+### Option C: Run from Source Code (For Developers)
 
 ```bash
 # 1. Clone the repository

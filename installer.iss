@@ -35,8 +35,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "dist_build\DroidDoctor\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist_build\DroidDoctor\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "release_v1.1.1\DroidDoctor-v1.1.1-Portable\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release_v1.1.1\DroidDoctor-v1.1.1-Portable\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\assets\app_icon.ico"
