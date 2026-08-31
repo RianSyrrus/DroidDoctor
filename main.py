@@ -42,13 +42,14 @@ except Exception:
 
 # Set Windows Application User Model ID for taskbar icon grouping
 try:
-    myappid = "riansyrrus.droiddoctor.suite.1.1.1"
+    myappid = "riansyrrus.droiddoctor.suite.1.2.3"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except Exception:
     pass
 
 from core.adb_manager import ADBManager
 from core.hardware_parser import HardwareParser
+from core.auto_reconnect import AutoReconnectWatchdog
 from ui.main_window import MainWindow
 
 def main():
@@ -58,7 +59,7 @@ def main():
     and starts the primary desktop graphical interface.
     """
     print("=" * 60)
-    print("  DroidDoctor v1.0.0 Pro — Android Health & Diagnostics Suite")
+    print("  DroidDoctor v1.2.3 Pro — Android Health & Diagnostics Suite")
     print("=" * 60)
     from core.settings_manager import SettingsManager
     from core.i18n import I18n
@@ -73,6 +74,12 @@ def main():
     print("[BOOT] Initializing ADB Manager & Hardware Parser...")
     adb = ADBManager()
     parser = HardwareParser(adb)
+    
+    # Start Background Auto-Reconnect Watchdog Daemon
+    try:
+        AutoReconnectWatchdog.get_instance(adb).start()
+    except Exception:
+        pass
     
     print("[BOOT] Launching MainWindow Desktop GUI...")
     app = MainWindow(adb, parser)

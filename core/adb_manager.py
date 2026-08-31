@@ -158,6 +158,19 @@ class ADBManager:
         except Exception as e:
             return False, f"Error: {str(e)}"
 
+    def get_mdns_services(self) -> List[Dict[str, str]]:
+        """
+        Retrieves active mDNS-discovered Android ADB endpoints.
+
+        Returns:
+            List[Dict[str, str]]: List of discovered services.
+        """
+        try:
+            from .wireless_scanner import WirelessScanner
+            return WirelessScanner.parse_mdns_services(self.adb_bin)
+        except Exception:
+            return []
+
     def enable_tcpip(self, port: int = 5555) -> bool:
         """
         Switches the connected device ADB daemon to TCP/IP listening mode.

@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.1.1 Pro)
+# DroidDoctor Desktop Suite (v1.2.3 Pro)
 
-> High-Performance Android Hardware Diagnostics, Low-Latency Screen Mirroring, Safe Non-Root Debloater, and System Maintenance Suite for Windows.
+> High-Performance Android Hardware Diagnostics, Wireless ADB QR Code Suite, Low-Latency Screen Mirroring, Safe Non-Root Debloater, and System Maintenance Suite for Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.1.1--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.2.3--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -82,17 +82,18 @@ Before using DroidDoctor, ensure your Android device has **USB Debugging** or **
 3. Check the box **"Always allow from this computer"**, then tap **Allow** (OK).
 4. DroidDoctor will automatically detect the device and populate the dashboard within 1 second.
 
-### 3. Connecting via Wi-Fi (Wireless ADB)
-* **Method A: Android 11, 12, 13, 14, 15+ (Wireless Debugging Pairing):**
-  1. Ensure both your PC and phone are connected to the **same Wi-Fi network**.
-  2. On your phone, go to **Developer Options** > enable **Wireless Debugging**.
-  3. Tap on **"Pair device with pairing code"**. A dialog will display an **IP address & Port** and a **6-digit Wi-Fi pairing code**.
-  4. In DroidDoctor, click the **Wi-Fi Connect** button at the top-right of the Dashboard.
-  5. Enter the IP, Port, and Pairing Code, then click **Pair & Connect**.
-* **Method B: Android 10 and older (TCP/IP Mode):**
-  1. Connect the phone via USB cable once.
-  2. In DroidDoctor, open **Technician Tools** > click **Enable Wireless ADB (Port 5555)** (or run `adb tcpip 5555`).
-  3. Unplug the USB cable, click **Wi-Fi Connect**, and enter `phone_ip:5555`.
+### 3. Connecting via Wi-Fi (Wireless ADB Connection Suite)
+* **Method 1: Instant QR Code Scan (Android 11+ Developer Options):**
+  1. Connect your PC and Android phone to the **same Wi-Fi network**.
+  2. On your phone, go to **Developer Options** > **Wireless Debugging** > tap **"Pair device with QR code"**.
+  3. In DroidDoctor, open **Wi-Fi Connect** (Tab: **📷 Scan QR Code**) and point your phone camera at the screen.
+  4. DroidDoctor's real-time handshake daemon pairs and connects automatically in **< 1 second**!
+* **Method 2: Smart Auto-Discovery & Inline PIN:**
+  1. Open **Wi-Fi Connect** > **🔍 Auto-Discovery**.
+  2. Click **Scan Network for Devices**. Active endpoints and pairing services are discovered automatically.
+  3. Enter the 6-digit pairing PIN shown on your phone and click **Pair PIN** for instant 1-click connection.
+* **Method 3: Saved Bookmarks & Legacy TCP/IP (Port 5555):**
+  1. Save frequently used phone profiles and nicknames in **⭐ Manual & Bookmarks** for instant reconnection.
 
 ### 🛠️ Common Connection Troubleshooting
 * **Device not detected:** Re-plug the USB cable, switch the USB connection mode on your phone from *"Charging only"* to *"File Transfer (MTP)"*, or try a different USB port.
@@ -103,11 +104,11 @@ Before using DroidDoctor, ensure your Android device has **USB Debugging** or **
 ## Getting Started
 
 ### Option A: Setup Installer (Recommended for Standard Installation)
-1. Download `DroidDoctor-Setup-v1.1.1.exe` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+1. Download `DroidDoctor-Setup-v1.2.3.exe` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Run the installer wizard to install DroidDoctor to your Start Menu and Desktop.
 
 ### Option B: Portable Standalone Executable (Zero Installation)
-1. Download `DroidDoctor-v1.1.1-Portable.zip` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+1. Download `DroidDoctor-v1.2.3-Portable.zip` from [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Extract the archive and launch `DroidDoctor.exe`. No external Python or ADB installation is required.
 
 ### Option C: Run from Source Code (For Developers)

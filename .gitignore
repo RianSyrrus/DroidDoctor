@@ -47,3 +47,9 @@ AGENTS.md
 .cursorrules
 .gemini/
 .claude/
+
+# Tools & generator temporary render cache
+tools/audio_reels/
+tools/reels_frames/
+tools/concat_audio.txt
+tools/*.mp3

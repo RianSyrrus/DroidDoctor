@@ -1,8 +1,8 @@
-# DroidDoctor Desktop Suite (v1.1.1 Pro)
+# DroidDoctor Desktop Suite (v1.2.3 Pro)
 
-> Suite Diagnostik Perangkat Keras Android, Pencerminan Layar Berlatensi Rendah, Debloater Aman Tanpa Root, dan Pemeliharaan Sistem untuk Windows.
+> Suite Diagnostik Perangkat Keras Android, Suite Nirkabel QR Code ADB, Pencerminan Layar Berlatensi Rendah, Debloater Aman Tanpa Root, dan Pemeliharaan Sistem untuk Windows.
 
-[![Release](https://img.shields.io/badge/Release-v1.1.1--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
+[![Release](https://img.shields.io/badge/Release-v1.2.3--Pro-blue.svg)](https://github.com/RianSyrrus/DroidDoctor/releases)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -82,17 +82,18 @@ Sebelum menggunakan DroidDoctor, pastikan perangkat Android Anda telah mengaktif
 3. Centang kotak **"Selalu izinkan dari komputer ini"**, lalu tekan **Izinkan (Allow / OK)**.
 4. DroidDoctor akan langsung mendeteksi ponsel dan menampilkan seluruh telemetri hardware secara otomatis dalam 1 detik.
 
-### 3. Menyambungkan Tanpa Kabel / Wi-Fi (Wireless ADB)
-* **Metode A: Android 11, 12, 13, 14, 15+ (Pairing Code):**
+### 3. Menyambungkan Tanpa Kabel / Wi-Fi (Wireless ADB Connection Suite)
+* **Metode 1: Pindai Kode QR Instan (Android 11+ Opsi Pengembang):**
   1. Pastikan PC dan ponsel terhubung ke **jaringan Wi-Fi yang sama**.
-  2. Masuk ke **Opsi Pengembang** -> aktifkan **Debugging Nirkabel (Wireless Debugging)**.
-  3. Ketuk pada opsi **"Pasangkan perangkat dengan kode penyambungan (Pair device with pairing code)"**. Layar akan menampilkan alamat **IP & Port** serta **6-digit Kode Sandi (Pairing Code)**.
-  4. Di DroidDoctor, klik tombol **Sambung Wi-Fi (Wi-Fi Connect)** di pojok kanan atas Dashboard.
-  5. Masukkan IP, Port, dan Kode Sandi, lalu klik **Pasangkan & Sambung**.
-* **Metode B: Android 10 ke Bawah (Mode TCP/IP):**
-  1. Colokkan kabel USB ke ponsel satu kali terlebih dahulu.
-  2. Buka tab **Technician Tools** di DroidDoctor -> klik **Aktifkan Wireless ADB (Port 5555)** (atau ketik perintah `adb tcpip 5555`).
-  3. Cabut kabel USB, klik tombol **Sambung Wi-Fi** di Dashboard, lalu masukkan `IP_Ponsel:5555`.
+  2. Masuk ke **Opsi Pengembang** -> aktifkan **Debugging Nirkabel** -> ketuk **"Pasangkan perangkat dengan kode QR"**.
+  3. Di DroidDoctor, klik tombol **Sambung Wi-Fi** (Tab: **📷 Scan QR Code**) dan arahkan kamera HP ke layar PC.
+  4. Mesin *handshake daemon* DroidDoctor akan memasangkan dan menghubungkan ponsel secara otomatis dalam **< 1 detik**!
+* **Metode 2: Pindai Otomatis & Input PIN 6-Digit:**
+  1. Buka dialog **Sambung Wi-Fi** -> pilih tab **🔍 Pindai Otomatis**.
+  2. Klik **Pindai Jaringan Wi-Fi**. Endpoint HP akan terdeteksi secara otomatis.
+  3. Masukkan 6-digit kode yang muncul di HP dan klik **Pasangkan PIN** untuk koneksi instan.
+* **Metode 3: Bookmark & Profil Tersimpan (Mode TCP/IP Port 5555):**
+  1. Simpan nama alias dan profil HP di tab **⭐ Manual & Bookmark** untuk menghubungkan ulang dengan 1-klik di sesi berikutnya.
 
 ### 🛠️ Solusi Masalah Penyambungan (Troubleshooting)
 * **Ponsel Tidak Terdeteksi:** Cabut dan colokkan ulang kabel USB, ubah mode USB di bar notifikasi ponsel dari *"Hanya Mengisi Daya"* ke *"Transfer File (MTP)"*, atau gunakan port USB lain di komputer Anda.
@@ -103,11 +104,11 @@ Sebelum menggunakan DroidDoctor, pastikan perangkat Android Anda telah mengaktif
 ## Panduan Memulai
 
 ### Opsi A: Berkas Installer Setup (Disarankan untuk Instalasi Standar)
-1. Unduh `DroidDoctor-Setup-v1.1.1.exe` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+1. Unduh `DroidDoctor-Setup-v1.2.3.exe` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Jalankan wizard pemasangan untuk menginstal DroidDoctor ke Start Menu dan Desktop Windows.
 
 ### Opsi B: Versi Portabel Siap Pakai (Tanpa Instalasi)
-1. Unduh `DroidDoctor-v1.1.1-Portable.zip` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
+1. Unduh `DroidDoctor-v1.2.3-Portable.zip` dari halaman [GitHub Releases](https://github.com/RianSyrrus/DroidDoctor/releases).
 2. Ekstrak arsip ZIP dan buka `DroidDoctor.exe`. Tidak memerlukan instalasi Python atau ADB terpisah.
 
 ### Opsi C: Menjalankan dari Kode Sumber (Untuk Pengembang)
